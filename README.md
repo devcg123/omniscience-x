@@ -1,32 +1,127 @@
 # OMNISCIENCE X
 
-### A collective intelligence engine. Not a language model. Something different.
-
-One HTML file. No API key. No server. No cost. Just open it.
+### What if a million people taught one AI everything they know — and you could see exactly how it thinks?
 
 ---
 
-I kept asking myself why every AI company is trying to build a better chatbot. More parameters. More training data. More compute. And none of them can tell you *why* they said what they said.
+Not a chatbot. Not a language model. A **collective intelligence engine** that learns from people and the web, reasons through chains of causation, detects contradictions, and shows you every single step.
 
-So I tried the opposite. What if instead of predicting the next word, you actually mapped knowledge as a graph — concepts connected by real relationships — and then reasoned through it step by step, showing everything?
-
-That's what this is.
-
-**Omniscience X** pulls knowledge from ConceptNet (34 million facts) and Wikipedia in real time, builds a reasoning graph, chains causation across multiple hops, finds contradictions, scores confidence, discovers analogies across domains, and shows you every single step of how it got to its answer.
-
-It's rough. The NLU is regex-based and breaks on complex sentences. The graph viz slows down past 500 nodes. It's a prototype, not a product.
-
-But the core idea works. And I think it matters.
+One HTML file. No API key. No server. No cost.
 
 ---
 
-## Just Try It
+## The Problem Nobody's Solving
+
+Every AI right now is a black box. You ask ChatGPT a question, you get a confident answer, and you have **no idea** if it's true, where it came from, or how certain it actually is. If experts disagree, it picks a side and acts like it's fact. If it's wrong, you can't tell.
+
+That's fine for writing emails. It's dangerous for medical decisions, legal questions, investment analysis, or anything where being wrong has consequences.
+
+## What This Does Instead
+
+Omniscience X takes the opposite approach. It maps knowledge as a **graph** — concepts connected by real relationships (causes, prevents, increases, decreases) — and reasons through it step by step, showing everything.
+
+Ask it a question. It shows you:
+- **Every reasoning step** it took to reach the answer
+- **Confidence scores** on every single claim
+- **Source counts** — how many people independently confirmed each fact
+- **Contradictions** — when evidence conflicts, it shows both sides instead of hiding one
+- **The full causal chain** — not just "A causes B" but "A causes B which increases C which leads to D" with confidence degrading at each hop
+
+**You can challenge any link in the chain.** If one step is wrong, you can see exactly which one and why.
+
+---
+
+## Why This Gets Exciting At Scale
+
+Right now it's a prototype for one person. But the architecture is built for millions.
+
+### 10,000 Users: Better Than Any Single Expert
+
+Imagine 10,000 people — doctors, engineers, teachers, farmers, mechanics, economists — all teaching it what they know.
+
+Someone asks: **"I have a headache, blurred vision, and neck stiffness"**
+
+The graph returns:
+- **Meningitis** — 89% confidence, 3,200 sources (headache + neck stiffness + blurred vision pattern)
+- **Migraine with aura** — 74% confidence, 1,800 sources
+- **Hypertensive crisis** — 61% confidence, 800 sources
+
+And crucially it shows **why**: headache + neck stiffness + **fever** points to meningitis (2,400 sources). Without fever it points to migraine (1,200 sources). The distinguishing symptom is visible. The confidence is visible.
+
+No single doctor has seen every disease. But 3,200 medical professionals independently teaching symptom-disease connections? That graph knows patterns no individual could hold in their head.
+
+### 100,000 Users: It Discovers Things Nobody Taught It
+
+A doctor teaches: "cortisol suppresses immune function."
+An economist teaches: "unemployment increases stress."
+A neuroscientist teaches: "stress increases cortisol."
+A sociologist teaches: "automation increases unemployment."
+An engineer teaches: "AI increases automation."
+
+Nobody teaches the full chain. But the graph connects it:
+
+**AI → automation → unemployment → stress → cortisol → immune suppression → disease**
+
+Seven hops. Five different professions. One emergent insight that **no single expert could see** because nobody works across all five fields. The reasoning engine finds it automatically. Every link independently verified by thousands of people.
+
+That's not artificial intelligence. It's collective intelligence with a reasoning engine underneath.
+
+### 1 Million Users: A Prediction Engine
+
+The causal chains get dense enough to **predict consequences before they happen**.
+
+A government announces interest rate rises. The graph traces every known downstream chain:
+
+Interest rates rise → mortgage costs increase (99%, 500K sources) → house purchases decrease (96%) → construction slows (91%) → construction jobs decrease (88%) → local spending drops (79%)
+
+**Simultaneously:** currency strengthens (86%) → exports become expensive (82%) → manufacturing competitiveness falls (76%)
+
+**Simultaneously:** savings increase (94%) → consumer spending falls (87%) → retail jobs decrease (83%)
+
+Four parallel cascade chains running simultaneously. Each link verified by hundreds of thousands of independent people. Confidence degrading at each hop so you see exactly where prediction becomes speculation.
+
+No economist models all sectors simultaneously. The graph does — because a million people from every sector taught it their piece.
+
+### At Scale: It Finds Leverage Points In Complex Problems
+
+Every big problem — poverty, climate, disease — is a web of causal chains. Most interventions fail because they target the wrong point.
+
+The graph can find **convergence nodes** — places where the most causal chains intersect. The single interventions that cascade through the most downstream effects.
+
+Ask "how do we reduce poverty" and it traces every chain backward. Maybe **female education** appears upstream of: reduced birth rates, improved child nutrition, improved child health, increased economic participation, improved governance. One node upstream of dozens of outcomes. Found not by ideology but by graph topology over billions of verified edges.
+
+### At Billion Scale: It Maps Human Ignorance
+
+Dense clusters show what humanity understands well. **The empty spaces between clusters show what we haven't figured out yet.**
+
+The void between neuroscience and consciousness? That's the hard problem of consciousness — visible, measurable, specific.
+
+The graph could generate a ranked list of the **most important unanswered questions in human knowledge** — the biggest gaps between the densest clusters. That list would be worth more than every research grant ever issued. It would tell researchers exactly where to look.
+
+---
+
+## What Makes This Different From Everything Else
+
+| | ChatGPT / Claude | Google | Wikipedia | **Omniscience X** |
+|---|---|---|---|---|
+| Shows reasoning | ❌ | ❌ | ❌ | ✅ Every step visible |
+| Confidence scores | ❌ | ❌ | ❌ | ✅ Every claim scored |
+| Contradictions | Picks one answer | Shows all results | One consensus | ✅ Both sides preserved |
+| Source tracing | ❌ | Links only | Citations | ✅ Source count per edge |
+| Learns from you | ❌ | ❌ | Edit process | ✅ Real-time |
+| Predicts cascades | ❌ | ❌ | ❌ | ✅ Multi-hop forward propagation |
+| Runs locally | ❌ | ❌ | ❌ | ✅ One HTML file |
+| Cost | $20/month+ | Free | Free | ✅ Free forever |
+
+---
+
+## Try It Right Now
 
 1. Download `omniscience-x.html`
-2. Open in your browser
-3. Ask it something
+2. Open in your browser (not inside another app — directly in Chrome/Firefox/Safari)
+3. Start asking questions
 
-No install. No signup. No API key. Nothing.
+No install. No signup. No API key.
 
 Try:
 - `what is photosynthesis`
@@ -35,126 +130,93 @@ Try:
 - `what if the internet disappeared`
 - `connect music and mathematics`
 
----
-
-## What It Actually Does
-
-**Learns from the web in real time.** Ask about something it doesn't know and it goes to ConceptNet and Wikipedia, pulls structured facts, adds them to the graph, reasons over them. You watch the knowledge appear.
-
-**Learns from you.** Say "stress increases cortisol" or "dogs are mammals" and it creates graph edges, auto-deduces implications, generates hypotheses from the structure.
-
-**Chains causation.** Ask "why is inflation rising" and it walks the graph: money supply up → spending up → demand up → prices up → inflation. Every link has a confidence percentage. Every step is visible.
-
-**Handles contradictions properly.** Teach it "nuclear energy is safe" then "nuclear energy is dangerous." It doesn't pick a side. It keeps both, flags the contradiction, shows source counts. You see the disagreement instead of a fake consensus.
-
-**Runs counterfactuals.** Ask "what if the sun disappeared" and it traces every causal chain forward from the sun, inverts each one, shows the cascade with confidence scores.
-
-**Finds analogies.** The engine looks for concepts that share graph structure but not meaning — cross-domain parallels that nobody explicitly taught it.
-
-**Three views:**
-- **Dialogue** — chat with it, reasoning chains shown inline
-- **Knowledge Graph** — force-directed visualisation of everything it knows, updating live
-- **Reasoning Trace** — every cognitive step for every response, fully transparent
+It pulls live from **ConceptNet** (34 million common-sense facts) and **Wikipedia** in real time, builds a reasoning graph, and shows you every step.
 
 ---
 
-## How It Works (Short Version)
+## Three Views
 
-Every concept is a node with a 32-dimensional embedding. Connections are typed — is_a, causes, increases, decreases, prevents, enables, etc. — and weighted by confidence.
+**Dialogue** — chat with it, see reasoning chains and confidence scores inline
 
-When you ask something, it parses intent, activates relevant concepts, spreads activation through the graph, finds multi-hop paths, runs deduction and abduction, checks for analogies, and builds a response where every claim traces back to a specific graph traversal.
+**Knowledge Graph** — live force-directed visualisation of its entire mind, updating in real time. Blue = confirmed. Purple = web-learned. Gold = contested.
 
-Confidence propagates through chains and degrades at each hop. A→B at 90% then B→C at 80% gives 72% for the full chain. Contested edges halve confidence automatically.
-
-Web enrichment hits ConceptNet and Wikipedia APIs (both free, no key). Facts come back as structured relationships that slot into the graph with source tags.
-
-Everything saves to browser storage. Close the tab, come back, your graph is still there.
+**Reasoning Trace** — every cognitive operation visible. Intent → concept extraction → spreading activation → path-finding → deduction → hypothesis → confidence. Nothing hidden.
 
 ---
 
-## Two Versions
+## How It Works
 
-`omniscience.html` — base engine. You teach it everything. No web calls.
+**Knowledge Graph** — concepts as nodes with 32-dimensional embeddings, connected by typed relationships (is_a, causes, prevents, increases, decreases, has, can, part_of, similar_to, is_not) weighted by confidence and source count.
 
-`omniscience-x.html` — full version. Learns from you AND pulls from ConceptNet + Wikipedia live.
+**Web Enrichment** — queries ConceptNet and Wikipedia APIs (free, no key) in real time. Extracts structured facts and integrates them into the graph. You watch it learn.
 
-Both have the knowledge graph, multi-hop reasoning, contradiction detection, confidence scoring, analogies, counterfactuals, and memory.
+**Multi-Hop Reasoning** — chains causation up to 6 hops. Confidence degrades at each step. A→B at 90% then B→C at 80% = 72% overall. Contested edges halve confidence.
 
----
+**Contradiction Detection** — opposite relations tracked (causes/prevents, increases/decreases, is/is_not). Both sides preserved with independent scores. Shows the real disagreement.
 
-## Why I Think This Matters
+**Analogy Engine** — finds cross-domain structural parallels. Heart↔pump, economy↔ecosystem. Emerges from graph topology, not from anyone teaching it.
 
-Every AI right now is a black box. You ask, you get an answer, no idea how it got there. If it's wrong you can't tell. If it's uncertain it doesn't say. If experts disagree it picks a side and acts confident.
+**Counterfactual Analysis** — "what if X disappeared?" Traces causal chains forward, inverts each, shows the full cascade.
 
-Fine for writing emails. Not fine for medical decisions, legal questions, policy analysis, or anything where being wrong actually matters.
-
-This is the opposite approach. Every claim has a confidence score. Every connection has a source. Every contradiction is visible. Every reasoning step is shown. You can audit every response and challenge any link.
-
-It won't write you a poem. Won't have a warm conversation. But it'll show you exactly why it thinks what it thinks and be honest about what it doesn't know.
-
-I think there's room for both approaches and the transparent one is massively underbuilt.
+**Episodic Memory** — stores conversations, recalls by relevance, consolidates patterns over time.
 
 ---
 
 ## What's Missing (Honestly)
 
-It's a browser prototype. One HTML file. Works for one person. To work at scale it needs:
+It's a prototype. One person, one browser. The NLU breaks on complex sentences. The graph viz slows past 500 nodes.
 
-- A graph database (Neo4j) replacing the JavaScript arrays in memory
-- A server so multiple people share one graph
-- Real-time sync so you see other people's contributions
-- Better NLU (the regex parser is the weakest part by far)
-- User auth and trust scoring
-- Graph viz that doesn't choke past 500 nodes
+To become what's described above it needs:
+- Graph database (Neo4j) replacing in-memory arrays
+- Server for shared multi-user graph
+- Real-time sync between users
+- Better natural language understanding
+- Trust scoring and moderation
 
-None of that is research. It's engineering. Every function in the HTML maps directly to a backend operation.
+All solved problems. The gap is engineering, not research.
 
 ---
 
 ## Looking for a Backend Engineer
 
-I built the engine. I need someone to build the platform underneath it.
+I built the reasoning engine. I need someone to build the platform underneath.
 
-If you know Node.js and Neo4j and you want to work on something that isn't another CRUD app — read the code, read the [vision doc](VISION.md), and [open an issue](../../issues) if it clicks.
+Node.js + Neo4j + WebSocket. The HTML file is the spec — every function tells you what the backend needs to do.
 
-Not looking for a contractor. Looking for someone who sees where this goes and wants to help get it there.
+Not looking for a contractor. Looking for someone who reads the [vision doc](VISION.md) and thinks "I need this to exist."
+
+[Open an issue](../../issues) if that's you.
 
 ---
 
 ## Contributing
 
-PRs welcome. Big priorities:
+PRs welcome. Priorities:
 
-1. **NLU** — the intent parser is regex. Anything smarter helps massively.
-2. **More knowledge sources** — Wikidata, DBpedia, anything structured and free
-3. **Graph viz performance** — WebGL, spatial indexing, neighbourhood rendering
-4. **Mobile** — works but needs touch controls on the graph
+1. **NLU** — replace regex with proper natural language understanding
+2. **Response quality** — readable answers backed by visible graph data
+3. **More knowledge sources** — Wikidata, DBpedia, anything structured and free
+4. **Graph viz** — WebGL rendering, neighbourhood view, performance at scale
 5. **Import/export** — share graphs as JSON
-6. **The backend** — the big one
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## The Bet
+
+Transparent reasoning over structured knowledge — where every claim is traceable and every contradiction is visible — is more valuable for serious decisions than fluent text from a black box.
+
+Language models sound human.
+Knowledge graphs show truth — and show why.
+
+The world needs both. Only one is a billion-dollar industry. This is a shot at building the other.
 
 ---
 
 ## License
 
-MIT. Do what you want with it.
-
----
-
-## FAQ
-
-**Is this AI?**
-Depends what you mean. No neural network. Doesn't predict text. It reasons over a knowledge graph — traverses relationships, chains causation, propagates confidence. Closer to expert systems than to GPT, but with live web learning and modern graph structure.
-
-**Can it replace ChatGPT?**
-No. Different tool, different job. ChatGPT generates text fluently. This shows structured reasoning transparently. Use ChatGPT for conversation, use this for understanding *why*.
-
-**Why one HTML file?**
-To prove the concept without needing money, a team, or infrastructure. If the idea is good, the rest follows.
-
-**Where does my data go?**
-Stays in your browser. Nothing sent anywhere except read-only queries to ConceptNet and Wikipedia public APIs. Your graph is local.
+MIT.
 
 ---
 

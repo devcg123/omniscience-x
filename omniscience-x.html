@@ -17,7 +17,7 @@ body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;hei
 .topbar .metrics b.blue{color:var(--blue)}
 .topbar .metrics b.green{color:var(--green)}
 .topbar .metrics b.purple{color:var(--purple)}
-.center{grid-column:1;grid-row:2;display:flex;flex-direction:column;min-width:0}
+.center{grid-column:1;grid-row:2;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
 .tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
 .tab{padding:6px 14px;font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.15;cursor:pointer;border-bottom:2px solid transparent}
 .tab.active{opacity:0.4;border-bottom-color:rgba(107,150,255,0.2)}
@@ -28,7 +28,7 @@ canvas#graphCanvas{flex:1;cursor:grab}
 .msg{max-width:88%;padding:9px 13px;border-radius:7px;line-height:1.65;font-size:12px;animation:fi .3s}
 .msg.u{align-self:flex-end;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.45)}
 .msg.ai{align-self:flex-start;background:rgba(107,140,255,0.025);border:1px solid rgba(107,140,255,0.05);color:rgba(140,170,255,0.6)}
-.msg .chain{font:8px/1.4 monospace;opacity:0.2;margin-bottom:5px;border-left:2px solid rgba(107,150,255,0.08);padding-left:7px}
+.msg .chain{font:8px/1.4 monospace;opacity:0.35;margin-bottom:5px;border-left:2px solid rgba(107,150,255,0.08);padding-left:7px;max-height:60px;overflow-y:auto;word-break:break-word}
 .msg .conf{display:inline-block;font:7.5px monospace;padding:1px 4px;border-radius:2px;margin:0 1px}
 .msg .conf.high{background:rgba(100,220,150,0.08);color:var(--green)}
 .msg .conf.med{background:rgba(255,200,80,0.08);color:var(--gold)}
@@ -296,6 +296,8 @@ async function fetchWikipedia(concept){
   let resp=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(concept)}`)
   if(!resp.ok)return null
   let data=await resp.json()
+  // Skip disambiguation pages — they don't contain useful facts
+  if(data.type==='disambiguation'||data.description?.includes('disambiguation'))return null
   let result={title:data.title||concept,summary:data.extract||'',description:data.description||''}
   webCache.set(key,result)
   return result
@@ -357,12 +359,12 @@ async function enrichConcept(concept,trace){
  // Wikipedia
  let wiki=await fetchWikipedia(concept)
  if(wiki&&wiki.summary){
-  // Add description as property
+  // Store summary in cache with concept key for later retrieval in responses
+  webCache.set('wp:'+concept,wiki)
   let n=kg.find(concept)||kg.add(concept)
-  if(n&&wiki.description){
+  if(n&&wiki.description&&!wiki.description.includes('disambiguation')){
    kg.link(concept,wiki.description,'described_as',0.85,'wikipedia')
   }
-  // Extract facts from summary
   let wpFacts=extractFactsFromSummary(concept,wiki.summary)
   for(let f of wpFacts.slice(0,10)){
    kg.link(f.from,f.to,f.rel,f.confidence,'web')
@@ -514,9 +516,18 @@ async function reason(input){
  trace.push({label:'intent',content:`${intent.type} — concepts: ${intent.concepts.join(', ')}`})
 
  // Auto-enrich unknown concepts from web
+ // First try the full phrase from parts, then individual concepts
+ let fullPhrase=intent.parts[0]||intent.concepts.join(' ')
+ let toEnrich=[]
+ if(fullPhrase&&fullPhrase.length>2&&!['greet','identity','dump'].includes(intent.type)){
+  let fpNode=kg.find(fullPhrase)
+  if(!fpNode||kg.edgesOf(fpNode.id).length<3)toEnrich.push(fullPhrase)
+ }
  let unknowns=intent.concepts.filter(c=>!kg.find(c)||kg.edgesOf(kg.find(c).id).length<3)
- if(unknowns.length>0&&!['greet','identity','dump'].includes(intent.type)){
-  let fetched=await enrichAll(unknowns,trace)
+ toEnrich.push(...unknowns)
+ toEnrich=[...new Set(toEnrich)]
+ if(toEnrich.length>0&&!['greet','identity','dump'].includes(intent.type)){
+  let fetched=await enrichAll(toEnrich,trace)
   if(fetched>0)trace.push({label:'enriched',content:`${fetched} facts acquired from web`,web:true})
  }
 
@@ -577,14 +588,23 @@ async function reason(input){
    let anal=analogyEng.find(node)
    let hyps=logic.abduct(node)
 
+   // Check if we have a Wikipedia summary cached
+   let wikiSummary=webCache.get('wp:'+topic)||webCache.get('wp:'+topic.replace(/\s+/g,'_'))
+   
    let grouped={};edges.forEach(e=>{
     let key=e.dir==='out'?e.rel:`${e.rel}_of`
     if(!grouped[key])grouped[key]=[]
     if(e.node)grouped[key].push({name:e.node.name,conf:e.confidence,sources:e.sources,contested:e.contested,source:e.source})
    })
 
-   if(Object.keys(grouped).length===0){
+   if(Object.keys(grouped).length===0&&!wikiSummary){
     response=`searched ConceptNet and Wikipedia but found limited structured data for "${topic}". teach me directly or try a related term.`;conf=0.1;break
+   }
+
+   // Start with Wikipedia summary if we have one
+   let responseParts=[]
+   if(wikiSummary&&wikiSummary.summary){
+    responseParts.push(`<div class="web">📖 ${wikiSummary.summary.slice(0,300)}${wikiSummary.summary.length>300?'...':''}</div>`)
    }
 
    let parts=Object.entries(grouped).map(([rel,targets])=>{
@@ -595,11 +615,13 @@ async function reason(input){
     })
     return`<b>${rel.replace(/_/g,' ')}</b>: ${items.join(', ')}`
    })
-   response=parts.join('. ')+'.'
-   if(deductions.length>0)response+=`<br><br>⚡ deduced: ${deductions.slice(0,3).map(d=>`${d.subject} ${d.rel} ${d.object} (${Math.round(d.confidence*100)}%)`).join('. ')}.`
-   if(anal)response+=`<br><br>analogy: ${anal.source} ↔ ${anal.target} (${Math.round(anal.score*100)}% structural match).`
-   if(hyps.length>0)response+=`<br><br>hypothesis: ${hyps[0].hypothesis}.`
-   conf=Math.max(...edges.map(e=>e.confidence),0);break
+   if(parts.length>0)responseParts.push(parts.join('. ')+'.')
+   if(deductions.length>0)responseParts.push(`⚡ deduced: ${deductions.slice(0,3).map(d=>`${d.subject} ${d.rel} ${d.object} (${Math.round(d.confidence*100)}%)`).join('. ')}.`)
+   if(anal)responseParts.push(`analogy: ${anal.source} ↔ ${anal.target} (${Math.round(anal.score*100)}% structural match).`)
+   if(hyps.length>0)responseParts.push(`hypothesis: ${hyps[0].hypothesis}.`)
+   
+   response=responseParts.join('<br><br>')
+   conf=Math.max(...edges.map(e=>e.confidence),wikiSummary?0.7:0);break
   }
 
   case 'why':case 'how':{

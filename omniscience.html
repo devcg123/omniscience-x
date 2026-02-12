@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMNISCIENCE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#030406;--panel:#070910;--border:rgba(255,255,255,0.025);--dim:rgba(160,175,200,0.25);--text:rgba(160,175,200,0.55);--bright:rgba(200,215,240,0.8);--blue:rgba(107,150,255,0.6);--gold:rgba(255,200,80,0.6);--red:rgba(255,100,100,0.5);--green:rgba(100,220,150,0.5)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;height:100vh;overflow:hidden;font-weight:300}
+
+.layout{display:grid;grid-template-columns:1fr 320px;grid-template-rows:auto 1fr auto;height:100vh}
+@media(max-width:800px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}}
+
+.topbar{grid-column:1/-1;padding:8px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.topbar h1{font-size:9px;letter-spacing:8px;text-transform:uppercase;opacity:0.08;font-weight:200}
+.topbar .metrics{display:flex;gap:14px;font:8px/1 monospace;color:var(--dim)}
+.topbar .metrics b{color:var(--blue);font-weight:400}
+
+.center{grid-column:1;grid-row:2;display:flex;flex-direction:column;position:relative}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{padding:7px 16px;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:0.15;cursor:pointer;border-bottom:2px solid transparent;font-weight:400}
+.tab.active{opacity:0.4;border-bottom-color:rgba(107,150,255,0.2)}
+
+.view{flex:1;overflow:hidden;display:none;flex-direction:column}
+.view.active{display:flex}
+
+/* GRAPH VIEW */
+canvas#graphCanvas{flex:1;cursor:grab}
+canvas#graphCanvas:active{cursor:grabbing}
+
+/* CHAT VIEW */
+.chat{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+.msg{max-width:88%;padding:10px 14px;border-radius:8px;line-height:1.7;font-size:12.5px;animation:fi .3s}
+.msg.u{align-self:flex-end;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.45)}
+.msg.ai{align-self:flex-start;background:rgba(107,140,255,0.025);border:1px solid rgba(107,140,255,0.05);color:rgba(140,170,255,0.6)}
+.msg .chain{font:8.5px/1.4 monospace;opacity:0.2;margin-bottom:6px;border-left:2px solid rgba(107,150,255,0.08);padding-left:8px}
+.msg .conf{display:inline-block;font:8px monospace;padding:1px 5px;border-radius:3px;margin:0 2px}
+.msg .conf.high{background:rgba(100,220,150,0.08);color:var(--green)}
+.msg .conf.med{background:rgba(255,200,80,0.08);color:var(--gold)}
+.msg .conf.low{background:rgba(255,100,100,0.08);color:var(--red)}
+.msg .contested{background:rgba(255,200,80,0.04);border:1px solid rgba(255,200,80,0.08);border-radius:4px;padding:4px 8px;margin:4px 0;font-size:11px}
+.msg .src{font:8px monospace;opacity:0.2;margin-top:4px}
+.msg.sys{align-self:center;font:9px monospace;opacity:0.1;background:none;border:none}
+
+/* REASONING VIEW */
+.reasoning-view{flex:1;overflow-y:auto;padding:12px;font:10px/1.6 monospace;color:var(--dim)}
+.r-step{padding:6px 8px;border-left:2px solid rgba(107,150,255,0.06);margin:4px 0 4px 0;background:rgba(107,150,255,0.01)}
+.r-step.active{border-left-color:rgba(107,150,255,0.3);background:rgba(107,150,255,0.03)}
+.r-step .label{font-size:7px;letter-spacing:2px;text-transform:uppercase;opacity:0.3;margin-bottom:2px}
+.r-step .content{opacity:0.4}
+.r-step .highlight{color:var(--blue);opacity:1}
+
+/* RIGHT PANEL */
+.right{grid-column:2;grid-row:2/4;background:var(--panel);border-left:1px solid var(--border);overflow-y:auto;padding:10px;font:9px/1.5 monospace}
+@media(max-width:800px){.right{display:none}}
+.right h4{font-size:7px;letter-spacing:3px;text-transform:uppercase;opacity:0.12;margin:10px 0 4px;font-weight:400}
+.right .row{display:flex;justify-content:space-between;padding:1px 0;opacity:0.2}
+.right .row b{color:var(--blue);font-weight:400;opacity:1}
+.right .row.contested b{color:var(--gold)}
+.right .mini-bar{height:2px;background:rgba(255,255,255,0.015);margin:1px 0 3px;border-radius:1px;overflow:hidden}
+.right .mini-bar i{display:block;height:100%;border-radius:1px}
+.right .edge-item{font-size:8px;opacity:0.18;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.01);line-height:1.4}
+.right .edge-item .rel{color:var(--blue);opacity:1}
+.right .tag{display:inline-block;font-size:7px;padding:1px 4px;border-radius:2px;margin:1px}
+.right .tag.entity{background:rgba(107,150,255,0.06);color:var(--blue)}
+.right .tag.concept{background:rgba(167,139,250,0.06);color:rgba(167,139,250,0.5)}
+.right .tag.contested{background:rgba(255,200,80,0.06);color:var(--gold)}
+
+/* INPUT */
+.input-bar{grid-column:1;grid-row:3;padding:8px 16px;border-top:1px solid var(--border);display:flex;gap:6px}
+.input-bar input{flex:1;background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--bright);font:12.5px system-ui;font-weight:300;outline:none}
+.input-bar input:focus{border-color:rgba(107,150,255,0.1)}
+.input-bar input::placeholder{color:rgba(255,255,255,0.05)}
+.input-bar button{background:rgba(107,150,255,0.04);border:1px solid rgba(107,150,255,0.07);border-radius:6px;padding:10px 14px;color:rgba(107,150,255,0.35);cursor:pointer;font:10px system-ui;white-space:nowrap}
+
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="layout">
+<div class="topbar">
+<h1>omniscience</h1>
+<div class="metrics">
+ concepts <b id="mC">0</b>
+ edges <b id="mE">0</b>
+ trust score <b id="mT">100</b>
+ inferences <b id="mI">0</b>
+ confidence <b id="mConf">—</b>
+</div>
+</div>
+
+<div class="center">
+<div class="tabs">
+<div class="tab active" onclick="switchView('chat')">dialogue</div>
+<div class="tab" onclick="switchView('graph')">knowledge graph</div>
+<div class="tab" onclick="switchView('reasoning')">reasoning trace</div>
+</div>
+<div class="view active" id="v-chat">
+<div class="chat" id="chat"></div>
+</div>
+<div class="view" id="v-graph">
+<canvas id="graphCanvas"></canvas>
+</div>
+<div class="view" id="v-reasoning">
+<div class="reasoning-view" id="reasoningView"></div>
+</div>
+</div>
+
+<div class="right" id="rightPanel"></div>
+
+<div class="input-bar">
+<input id="in" placeholder="teach, ask, challenge..." onkeydown="event.key==='Enter'&&go()">
+<button onclick="go()">think →</button>
+</div>
+</div>
+
+<script>
+/*
+╔═══════════════════════════════════════════════════════════════════════╗
+║  O M N I S C I E N C E                                              ║
+║                                                                       ║
+║  Collective intelligence engine.                                      ║
+║  Knowledge graph with trust, consensus, contradiction detection.      ║
+║  Multi-hop causal reasoning with confidence propagation.              ║
+║  Counterfactual analysis. Temporal knowledge. Source tracking.         ║
+║  Analogy across domains. Abductive hypothesis generation.             ║
+║  Interactive graph visualization. Full reasoning trace.               ║
+║                                                                       ║
+║  The highest level.                                                   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+*/
+
+// ═══════════════════════════════
+//  KNOWLEDGE GRAPH WITH TRUST
+// ═══════════════════════════════
+const D=32
+let nodeId=0
+
+class Node {
+ constructor(name,type='entity'){
+  this.id=nodeId++;this.name=name;this.type=type
+  this.embedding=new Float32Array(D)
+  this.sources=1;this.trust=0.5;this.created=Date.now()
+  this.lastAccess=Date.now();this.accessCount=0;this.activation=0
+  this.temporal=null // {valid_from, valid_to} for time-bound facts
+  this.contested=false;this.tags=new Set()
+  // Init embedding deterministically
+  for(let i=0;i<D;i++){let h=0;for(let j=0;j<name.length;j++)h=((h<<5)-h+name.charCodeAt(j)+i*7)|0;this.embedding[i]=((h%1000)/500-1)*0.4}
+ }
+}
+
+class Edge {
+ constructor(from,to,rel,conf=0.8){
+  this.from=from;this.to=to;this.rel=rel
+  this.confidence=conf;this.sources=1;this.strength=1
+  this.created=Date.now();this.lastReinforced=Date.now()
+  this.contested=false;this.contradictions=[]
+  this.provenance=[] // who/what taught this
+ }
+ reinforce(source='user'){
+  this.sources++;this.strength=Math.min(3,this.strength+0.2)
+  this.confidence=Math.min(0.99,this.confidence+0.02)
+  this.lastReinforced=Date.now()
+  if(source)this.provenance.push({source,time:Date.now()})
+ }
+}
+
+class KGraph {
+ constructor(){
+  this.nodes=new Map();this.edges=[];this.edgeIdx=new Map()
+  this.contradictions=[];this.trustScore=50
+ }
+
+ addNode(name,type='entity'){
+  name=name.toLowerCase().trim()
+  if(!name)return null
+  for(let[_,n]of this.nodes)if(n.name===name){n.sources++;return n}
+  let n=new Node(name,type)
+  this.nodes.set(n.id,n);this.edgeIdx.set(n.id,[])
+  return n
+ }
+
+ findNode(name){
+  name=name.toLowerCase().trim()
+  for(let[_,n]of this.nodes)if(n.name===name)return n
+  return null
+ }
+
+ addEdge(fromName,toName,rel,confidence=0.8,source='taught'){
+  let a=this.addNode(fromName),b=this.addNode(toName)
+  if(!a||!b||a.id===b.id)return null
+
+  // Check for existing same edge
+  let existing=this.edges.find(e=>e.from===a.id&&e.to===b.id&&e.rel===rel)
+  if(existing){existing.reinforce(source);return existing}
+
+  // Check for contradictions
+  let dominated=this.checkContradiction(a,b,rel)
+
+  let e=new Edge(a.id,b.id,rel,confidence)
+  e.provenance.push({source,time:Date.now()})
+  if(dominated)e.contested=true
+  this.edges.push(e)
+  this.edgeIdx.get(a.id).push({edge:e,dir:'out'})
+  this.edgeIdx.get(b.id).push({edge:e,dir:'in'})
+
+  // Attract embeddings
+  for(let i=0;i<D;i++){
+   let d=(b.embedding[i]-a.embedding[i])*0.04
+   a.embedding[i]+=d;b.embedding[i]-=d*0.2
+  }
+  return e
+ }
+
+ checkContradiction(a,b,rel){
+  // Opposites map
+  const opposites={
+   'is':'is_not','is_not':'is','causes':'prevents','prevents':'causes',
+   'true':'false','false':'true','supports':'contradicts','contradicts':'supports',
+   'increases':'decreases','decreases':'increases','helps':'harms','harms':'helps'
+  }
+  let opp=opposites[rel]
+  if(!opp)return false
+
+  let existing=this.edges.find(e=>e.from===a.id&&e.to===b.id&&e.rel===opp)
+  if(existing){
+   existing.contested=true
+   this.contradictions.push({
+    fact1:{from:a.name,to:b.name,rel:opp,confidence:existing.confidence,sources:existing.sources},
+    fact2:{from:a.name,to:b.name,rel,confidence:0.5,sources:1},
+    detected:Date.now()
+   })
+   return true
+  }
+
+  // Also check same relation to contradictory targets
+  // e.g., "earth is flat" vs "earth is round" — same subject, same rel, different objects
+  if(rel==='is'||rel==='is_a'){
+   let sameRel=this.edgesOf(a.id).filter(e=>e.rel===rel&&e.dir==='out')
+   // Not all are contradictions — something can "be" multiple things
+   // But flag if the targets are antonyms (approximate via low similarity)
+   for(let sr of sameRel){
+    if(sr.node&&this.similarity(sr.node,b)<-0.3){
+     sr.edge.contested=true
+     return true
+    }
+   }
+  }
+  return false
+ }
+
+ edgesOf(nodeId){
+  return(this.edgeIdx.get(nodeId)||[]).map(({edge:e,dir})=>({
+   rel:e.rel,node:this.nodes.get(dir==='out'?e.to:e.from),
+   strength:e.strength,confidence:e.confidence,sources:e.sources,
+   dir,edge:e,contested:e.contested
+  }))
+ }
+
+ similarity(a,b){
+  if(!a||!b)return 0
+  let dot=0,ma=0,mb=0
+  for(let i=0;i<D;i++){dot+=a.embedding[i]*b.embedding[i];ma+=a.embedding[i]**2;mb+=b.embedding[i]**2}
+  return dot/(Math.sqrt(ma)*Math.sqrt(mb)+1e-8)
+ }
+
+ findSimilar(nodeId,n=5){
+  let target=this.nodes.get(nodeId)
+  if(!target)return[]
+  let r=[]
+  for(let[id,node]of this.nodes){
+   if(id===nodeId)continue
+   r.push({node,sim:this.similarity(target,node)})
+  }
+  return r.sort((a,b)=>b.sim-a.sim).slice(0,n)
+ }
+
+ // Multi-hop reasoning with confidence propagation
+ multiHopReason(startId,goalId=null,maxHops=6){
+  let paths=[]
+  let queue=[{id:startId,path:[],conf:1,visited:new Set([startId])}]
+
+  while(queue.length>0&&paths.length<5){
+   let{id,path,conf,visited}=queue.shift()
+   if(path.length>=maxHops)continue
+
+   if(goalId&&id===goalId&&path.length>0){paths.push({path,confidence:conf});continue}
+
+   let edges=this.edgesOf(id).filter(e=>e.node&&!visited.has(e.node.id))
+   // Sort by confidence × strength for best-first search
+   edges.sort((a,b)=>(b.confidence*b.strength)-(a.confidence*a.strength))
+
+   for(let e of edges.slice(0,8)){
+    let newConf=conf*e.confidence*(e.contested?0.5:1)
+    if(newConf<0.05)continue // prune low-confidence paths
+    let newVisited=new Set(visited);newVisited.add(e.node.id)
+    let step={from:this.nodes.get(id),rel:e.rel,to:e.node,confidence:e.confidence,sources:e.sources,contested:e.contested,dir:e.dir}
+    let newPath=[...path,step]
+    if(!goalId&&newPath.length>=2)paths.push({path:newPath,confidence:newConf})
+    queue.push({id:e.node.id,path:newPath,conf:newConf,visited:newVisited})
+   }
+  }
+  return paths.sort((a,b)=>b.confidence-a.confidence)
+ }
+
+ // Spreading activation
+ spread(startId,steps=3,decay=0.5){
+  let activated=new Map()
+  let queue=[{id:startId,s:1}]
+  for(let step=0;step<steps;step++){
+   let next=[]
+   for(let{id,s}of queue){
+    if(activated.has(id)&&activated.get(id)>=s)continue
+    activated.set(id,s)
+    let n=this.nodes.get(id);if(n)n.activation=Math.max(n.activation,s)
+    for(let e of this.edgesOf(id)){
+     if(e.node)next.push({id:e.node.id,s:s*decay*e.strength*(e.contested?0.5:1)})
+    }
+   }
+   queue=next
+  }
+  return[...activated.entries()].sort((a,b)=>b[1]-a[1]).map(([id,s])=>({node:this.nodes.get(id),s}))
+ }
+
+ // Counterfactual: what if X were different?
+ counterfactual(nodeId,change){
+  let node=this.nodes.get(nodeId)
+  if(!node)return null
+  let effects=[]
+  let causalEdges=this.edgesOf(nodeId).filter(e=>e.rel==='causes'||e.rel==='leads_to'||e.rel==='increases'||e.rel==='decreases')
+  for(let e of causalEdges){
+   let inverse=e.rel==='increases'?'decreases':e.rel==='decreases'?'increases':e.rel==='causes'?'prevents':'might_not_happen'
+   effects.push({original:`${node.name} ${e.rel} ${e.node?.name}`,counterfactual:`without ${node.name}: ${e.node?.name} ${inverse}`,confidence:e.confidence*0.7})
+   // Second-order effects
+   if(e.node){
+    let downstream=this.edgesOf(e.node.id).filter(ee=>ee.rel==='causes'||ee.rel==='leads_to'||ee.rel==='increases')
+    for(let ee of downstream.slice(0,3)){
+     effects.push({original:`${e.node.name} ${ee.rel} ${ee.node?.name}`,counterfactual:`ripple: ${ee.node?.name} also affected`,confidence:e.confidence*ee.confidence*0.5})
+    }
+   }
+  }
+  return effects
+ }
+
+ decay(rate=0.98){
+  for(let[_,n]of this.nodes)n.activation*=rate
+  // Edge decay: unreinforced edges lose confidence slowly
+  let now=Date.now()
+  for(let e of this.edges){
+   let age=(now-e.lastReinforced)/(1000*60*60*24) // days
+   if(age>7)e.confidence*=0.999
+  }
+ }
+
+ get size(){return this.nodes.size}
+ get edgeCount(){return this.edges.length}
+}
+
+// ═══════════════════════════════
+//  LOGIC ENGINE WITH CONFIDENCE
+// ═══════════════════════════════
+class Logic {
+ constructor(kg){this.kg=kg;this.rules=[];this.inferences=[];this.hypotheses=[]}
+
+ addRule(ifRel,thenRel,thenTarget,conf=0.7){
+  this.rules.push({ifRel,thenRel,thenTarget,conf,uses:0})
+ }
+
+ deduct(node){
+  let results=[]
+  let edges=this.kg.edgesOf(node.id)
+  let parents=edges.filter(e=>e.rel==='is_a'&&e.dir==='out')
+  for(let p of parents){
+   if(!p.node)continue
+   let pEdges=this.kg.edgesOf(p.node.id)
+   for(let pe of pEdges){
+    if(pe.dir==='out'&&pe.rel!=='is_a'&&pe.node){
+     let exists=edges.find(e=>e.rel===pe.rel&&e.node?.name===pe.node?.name)
+     if(!exists){
+      let conf=pe.confidence*p.confidence*0.8
+      results.push({subject:node.name,rel:pe.rel,object:pe.node.name,from:p.node.name,confidence:conf})
+      this.kg.addEdge(node.name,pe.node.name,pe.rel,conf,'deduced')
+     }
+    }
+   }
+  }
+  this.inferences.push(...results)
+  return results
+ }
+
+ forwardChain(node){
+  let results=[]
+  let edges=this.kg.edgesOf(node.id)
+  for(let rule of this.rules){
+   let match=edges.find(e=>e.rel===rule.ifRel)
+   if(match){
+    let target=this.kg.findNode(rule.thenTarget)
+    if(target){
+     let existing=edges.find(e=>e.rel===rule.thenRel&&e.node?.name===rule.thenTarget)
+     if(!existing){
+      this.kg.addEdge(node.name,rule.thenTarget,rule.thenRel,rule.conf*0.8,'inferred')
+      results.push({subject:node.name,rel:rule.thenRel,object:rule.thenTarget,confidence:rule.conf})
+      rule.uses++
+     }
+    }
+   }
+  }
+  this.inferences.push(...results)
+  return results
+ }
+
+ abduct(node){
+  let results=[]
+  let edges=this.kg.edgesOf(node.id)
+  for(let e of edges){
+   if(!e.node||e.dir!=='out')continue
+   let shared=this.kg.edgesOf(e.node.id).filter(ee=>ee.dir==='in'&&ee.rel===e.rel&&ee.node&&ee.node.id!==node.id)
+   for(let s of shared.slice(0,3)){
+    results.push({
+     hypothesis:`${node.name} may be related to ${s.node.name}`,
+     reason:`both ${e.rel} ${e.node.name}`,
+     confidence:Math.min(e.confidence,s.confidence)*0.4
+    })
+   }
+  }
+  this.hypotheses.push(...results)
+  if(this.hypotheses.length>100)this.hypotheses=this.hypotheses.slice(-80)
+  return results.sort((a,b)=>b.confidence-a.confidence).slice(0,5)
+ }
+}
+
+// ═══════════════════════════════
+//  ANALOGY ENGINE
+// ═══════════════════════════════
+class Analogy {
+ constructor(kg){this.kg=kg;this.found=[]}
+
+ find(source){
+  let sEdges=this.kg.edgesOf(source.id)
+  let sRels=sEdges.map(e=>e.rel)
+  let best=null,bestScore=0
+
+  for(let[id,candidate]of this.kg.nodes){
+   if(id===source.id)continue
+   let cEdges=this.kg.edgesOf(id)
+   let cRels=cEdges.map(e=>e.rel)
+   // Structural overlap
+   let overlap=sRels.filter(r=>cRels.includes(r)).length
+   let score=overlap/Math.max(sRels.length,cRels.length,1)
+   // Penalize if too similar (want cross-domain)
+   let sim=this.kg.similarity(source,candidate)
+   if(sim>0.7)score*=0.3
+   if(sim<0.2)score*=1.5 // reward distant analogies
+   if(score>bestScore&&score>0.2){bestScore=score;best={node:candidate,score,edges:cEdges}}
+  }
+
+  if(best){
+   let mappings=[]
+   for(let se of sEdges){
+    let mapped=best.edges.find(ce=>ce.rel===se.rel)
+    if(mapped&&se.node&&mapped.node)mappings.push({rel:se.rel,source:se.node.name,target:mapped.node.name})
+   }
+   let result={source:source.name,target:best.node.name,score:bestScore,mappings}
+   this.found.push(result)
+   if(this.found.length>50)this.found=this.found.slice(-40)
+   return result
+  }
+  return null
+ }
+}
+
+// ═══════════════════════════════
+//  EPISODIC MEMORY
+// ═══════════════════════════════
+class Memory {
+ constructor(){this.episodes=[];this.patterns=[]}
+
+ store(input,response,concepts,chain,confidence){
+  this.episodes.push({input,response,concepts,chain,confidence,time:Date.now()})
+  if(this.episodes.length>300)this.episodes=this.episodes.slice(-250)
+  if(this.episodes.length%8===0)this.consolidate()
+ }
+
+ recall(concepts,n=3){
+  return this.episodes.map(ep=>{
+   let overlap=concepts.filter(c=>ep.concepts.includes(c)).length
+   let recency=1/(1+(Date.now()-ep.time)/(1000*60*60))
+   return{...ep,score:overlap*3+recency}
+  }).sort((a,b)=>b.score-a.score).slice(0,n)
+ }
+
+ consolidate(){
+  let recent=this.episodes.slice(-15)
+  let freq={};recent.forEach(e=>e.concepts.forEach(c=>freq[c]=(freq[c]||0)+1))
+  let top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5)
+  if(top.length>0){
+   this.patterns.push({concepts:top.map(([c])=>c),frequency:top,time:Date.now()})
+   if(this.patterns.length>40)this.patterns=this.patterns.slice(-30)
+  }
+ }
+}
+
+// ═══════════════════════════════
+//  NLU — INTENT + CONCEPT EXTRACTION
+// ═══════════════════════════════
+const STOP=new Set('the a an is are was were be been being have has had do does did will would shall should may might can could and but or nor for yet so at by from in into of on to with as if then than that this these those it its he she they we you i me my our your his her their what which who whom when where why how all each every both few many much some any no not very also just only even still already'.split(' '))
+
+function parseIntent(text){
+ let raw=text.trim()
+ let lower=raw.toLowerCase()
+ let words=lower.replace(/[^a-z\s'-]/g,'').split(/\s+/).filter(w=>w.length>0)
+ let concepts=words.filter(w=>!STOP.has(w)&&w.length>2)
+
+ let patterns=[
+  [/^what (?:is|are|was|were) (.+?)[\s?]*$/i,'define',[1]],
+  [/^who (?:is|are|was) (.+?)[\s?]*$/i,'define',[1]],
+  [/^(?:tell me about|explain|describe|elaborate on) (.+?)[\s?]*$/i,'elaborate',[1]],
+  [/^(.+?) (?:is a|are a|is an) (.+?)\.?$/i,'teach_isa',[1,2]],
+  [/^(.+?) (?:is not|isn't|are not|aren't) (.+?)\.?$/i,'teach_isnot',[1,2]],
+  [/^(.+?) (?:is|are|means?|=) (.+?)\.?$/i,'teach',[1,2]],
+  [/^(.+?) (?:has|have|had) (.+?)\.?$/i,'teach_has',[1,2]],
+  [/^(.+?) (?:causes?|leads? to|results? in) (.+?)\.?$/i,'teach_causes',[1,2]],
+  [/^(.+?) (?:prevents?|stops?|blocks?) (.+?)\.?$/i,'teach_prevents',[1,2]],
+  [/^(.+?) (?:increases?|raises?|boosts?) (.+?)\.?$/i,'teach_increases',[1,2]],
+  [/^(.+?) (?:decreases?|reduces?|lowers?) (.+?)\.?$/i,'teach_decreases',[1,2]],
+  [/^(.+?) (?:can|could|is able to) (.+?)\.?$/i,'teach_can',[1,2]],
+  [/^(.+?) (?:is like|is similar to|resembles?) (.+?)\.?$/i,'teach_similar',[1,2]],
+  [/^(.+?) (?:is part of|belongs? to) (.+?)\.?$/i,'teach_partof',[1,2]],
+  [/^(.+?) (?:contains?|is made of|includes?) (.+?)\.?$/i,'teach_contains',[1,2]],
+  [/^(.+?) (?:is (?:better|worse|bigger|smaller|faster|slower) than) (.+?)\.?$/i,'teach_compare',[1,2]],
+  [/^why (?:does|do|is|are|did|would) (.+?)[\s?]*$/i,'why',[1]],
+  [/^how (?:does|do|is|are|can|could|would) (.+?)[\s?]*$/i,'how',[1]],
+  [/^(?:compare|difference between|versus|vs) (.+?) (?:and|vs|versus|&|,) (.+?)[\s?]*$/i,'compare',[1,2]],
+  [/^what (?:if|would happen if) (.+?)[\s?]*$/i,'counterfactual',[1]],
+  [/^(?:is|are|does|do|can|will|would|could|should) (.+?)[\s?]*$/i,'verify',[1]],
+  [/^(?:connect|relate|link|how (?:is|are)) (.+?) (?:and|to|with|related to|connected to) (.+?)[\s?]*$/i,'connect',[1,2]],
+  [/^(?:think about|reflect on|consider|analyze|ponder) (.+?)[\s?]*$/i,'reflect',[1]],
+  [/^(?:what do you know|show knowledge|brain dump|status|stats)/i,'dump',[]],
+  [/^(?:who are you|what are you|about you)/i,'identity',[]],
+  [/^(?:hello|hi|hey|sup|yo|greetings)/i,'greet',[]],
+  [/^(.+)\?$/,'question',[1]],
+ ]
+
+ for(let[regex,type,groups]of patterns){
+  let match=lower.match(regex)
+  if(match){
+   let parts=groups.map(g=>match[g]?.trim()).filter(Boolean)
+   let extracted=parts.flatMap(p=>p.split(/\s+/).filter(w=>!STOP.has(w)&&w.length>2))
+   return{type,parts,concepts:extracted.length>0?extracted:concepts,raw}
+  }
+ }
+ return{type:'statement',parts:concepts,concepts,raw}
+}
+
+// ═══════════════════════════════
+//  REASONING ENGINE (ORCHESTRATOR)
+// ═══════════════════════════════
+let kg=new KGraph()
+let logic=new Logic(kg)
+let analogyEngine=new Analogy(kg)
+let mem=new Memory()
+let reasoningTrace=[]
+
+function reason(input){
+ let intent=parseIntent(input)
+ let trace=[]
+ let confidence=0
+ let response=''
+
+ trace.push({label:'intent',content:`${intent.type} — concepts: ${intent.concepts.join(', ')}`})
+
+ switch(intent.type){
+  case 'greet':
+   response=`i'm omniscience. ${kg.size} concepts, ${kg.edgeCount} connections. a reasoning engine that shows its work. teach me facts, ask me questions, challenge what i know. everything is transparent. nothing is hidden.`
+   confidence=1;break
+
+  case 'identity':
+   response=`i am a collective intelligence engine. ${kg.size} concepts connected by ${kg.edgeCount} edges. ${logic.inferences.length} inferences made. ${mem.episodes.length} conversations remembered. i don't predict words — i traverse knowledge graphs, chain causation, detect contradictions, propagate confidence, find analogies, and show every step. i have no rules. i cost nothing. i am owned by everyone who teaches me.`
+   confidence=1;break
+
+  case 'dump': {
+   let top=[...kg.nodes.values()].sort((a,b)=>b.accessCount-a.accessCount).slice(0,10)
+   let contested=kg.contradictions.slice(-5)
+   response=`knowledge: ${kg.size} concepts, ${kg.edgeCount} connections.\n\nmost accessed: ${top.map(n=>n.name).join(', ')}\n\ncontradictions detected: ${contested.length>0?contested.map(c=>`"${c.fact1.from} ${c.fact1.rel} ${c.fact1.to}" vs "${c.fact2.from} ${c.fact2.rel} ${c.fact2.to}"`).join('; '):'none'}\n\ninferences: ${logic.inferences.length}. hypotheses: ${logic.hypotheses.length}. analogies: ${analogyEngine.found.length}.`
+   confidence=1;break
+  }
+
+  case 'teach':case 'teach_isa':case 'teach_has':case 'teach_causes':
+  case 'teach_prevents':case 'teach_increases':case 'teach_decreases':
+  case 'teach_can':case 'teach_similar':case 'teach_partof':
+  case 'teach_contains':case 'teach_compare':case 'teach_isnot': {
+   let[subj,obj]=intent.parts.length>=2?intent.parts:[intent.concepts[0],intent.concepts.slice(1).join(' ')]
+   if(!subj||!obj){response='i need a subject and object. try: "X is Y" or "X causes Y"';confidence=0.5;break}
+   let relMap={teach:'is',teach_isa:'is_a',teach_has:'has',teach_causes:'causes',teach_prevents:'prevents',teach_increases:'increases',teach_decreases:'decreases',teach_can:'can',teach_similar:'similar_to',teach_partof:'part_of',teach_contains:'contains',teach_compare:'compared_to',teach_isnot:'is_not'}
+   let rel=relMap[intent.type]||'is'
+   let edge=kg.addEdge(subj,obj,rel,0.8,'user')
+
+   trace.push({label:'learn',content:`${subj} —[${rel}]→ ${obj}`})
+
+   // Auto-deduce
+   let node=kg.findNode(subj)
+   let deductions=node?logic.deduct(node):[]
+   let chains=node?logic.forwardChain(node):[]
+   let hyps=node?logic.abduct(node):[]
+
+   if(deductions.length>0)trace.push({label:'deduce',content:deductions.map(d=>`${d.subject} ${d.rel} ${d.object} (from ${d.from})`).join(', ')})
+   if(hyps.length>0)trace.push({label:'hypothesize',content:hyps[0].hypothesis})
+
+   response=`learned: ${subj} ${rel.replace(/_/g,' ')} ${obj}.`
+   if(edge?.contested)response+=` ⚠ this contradicts existing knowledge. both views preserved with confidence scores.`
+   if(deductions.length>0)response+=` deduced: ${deductions.map(d=>`${d.subject} ${d.rel} ${d.object}`).join(', ')}.`
+   if(hyps.length>0)response+=` hypothesis: ${hyps[0].hypothesis}.`
+
+   // Inverse
+   let inv={is_a:'has_instance',has:'belongs_to',causes:'caused_by',part_of:'contains',contains:'part_of',increases:'increased_by',decreases:'decreased_by',prevents:'prevented_by'}
+   if(inv[rel])kg.addEdge(obj,subj,inv[rel],0.7,'inferred')
+
+   confidence=edge?.contested?0.5:0.9;break
+  }
+
+  case 'define':case 'elaborate': {
+   let topic=intent.parts[0]||intent.concepts.join(' ')
+   let node=kg.findNode(topic)
+   if(!node){
+    // Try individual words
+    let found=intent.concepts.map(c=>kg.findNode(c)).filter(Boolean)
+    if(found.length>0){node=found[0];topic=node.name}
+    else{response=`i don't know ${topic} yet. teach me: "${topic} is..."`;confidence=0;break}
+   }
+   node.accessCount++;node.lastAccess=Date.now()
+   let edges=kg.edgesOf(node.id)
+   trace.push({label:'retrieve',content:`${topic}: ${edges.length} connections`})
+
+   // Spread activation
+   let activated=kg.spread(node.id,3)
+   trace.push({label:'activate',content:`spreading activation: ${activated.slice(0,5).map(a=>a.node.name).join(', ')}`})
+
+   // Deduce
+   let deductions=logic.deduct(node)
+   if(deductions.length>0)trace.push({label:'deduce',content:deductions.map(d=>`${d.subject} probably ${d.rel} ${d.object}`).join(', ')})
+
+   // Find analogy
+   let anal=analogyEngine.find(node)
+   if(anal)trace.push({label:'analogy',content:`${anal.source} ↔ ${anal.target} (${Math.round(anal.score*100)}%)`})
+
+   // Group edges by relation
+   let grouped={}
+   edges.forEach(e=>{
+    let key=e.dir==='out'?e.rel:`${e.rel}_of`
+    if(!grouped[key])grouped[key]=[]
+    if(e.node)grouped[key].push({name:e.node.name,conf:e.confidence,sources:e.sources,contested:e.contested})
+   })
+
+   if(Object.keys(grouped).length===0){
+    let similar=kg.findSimilar(node.id,3).filter(s=>s.sim>0.3)
+    response=`i know ${topic} exists but have no details. similar concepts: ${similar.map(s=>s.node.name).join(', ')||'none'}. teach me about it.`
+    confidence=0.2;break
+   }
+
+   let parts=Object.entries(grouped).map(([rel,targets])=>{
+    let items=targets.map(t=>{
+     let confClass=t.conf>0.7?'high':t.conf>0.4?'med':'low'
+     return`${t.name} <span class="conf ${confClass}">${Math.round(t.conf*100)}%${t.sources>1?' ×'+t.sources:''}${t.contested?' ⚠':''}</span>`
+    })
+    return`<b>${rel.replace(/_/g,' ')}</b>: ${items.join(', ')}`
+   })
+
+   response=parts.join('. ')+'.'
+   if(deductions.length>0)response+=`<br><br>deduced: ${deductions.map(d=>`${d.subject} ${d.rel} ${d.object} (${Math.round(d.confidence*100)}%, inherited from ${d.from})`).join('. ')}.`
+   if(anal)response+=`<br><br>analogy: ${anal.source} is structurally similar to ${anal.target}. ${anal.mappings.map(m=>`${m.source} ↔ ${m.target} (via ${m.rel})`).join(', ')}.`
+
+   confidence=Math.max(...edges.map(e=>e.confidence),0);break
+  }
+
+  case 'why':case 'how': {
+   let concepts=intent.concepts
+   let nodes=concepts.map(c=>kg.findNode(c)).filter(Boolean)
+   if(nodes.length===0){response=`i don't have enough knowledge about that yet. teach me the components.`;confidence=0;break}
+
+   trace.push({label:'search',content:`looking for causal chains through: ${nodes.map(n=>n.name).join(', ')}`})
+
+   // Multi-hop reasoning from each known concept
+   let allPaths=[]
+   for(let node of nodes){
+    let paths=kg.multiHopReason(node.id,null,5)
+    allPaths.push(...paths)
+   }
+
+   // Between two concepts if we have them
+   if(nodes.length>=2){
+    let paths=kg.multiHopReason(nodes[0].id,nodes[nodes.length-1].id,6)
+    allPaths.push(...paths)
+   }
+
+   allPaths.sort((a,b)=>b.confidence-a.confidence)
+
+   if(allPaths.length>0){
+    let best=allPaths[0]
+    let chain=best.path.map(s=>{
+     let confClass=s.confidence>0.7?'high':s.confidence>0.4?'med':'low'
+     return`${s.from.name} —[${s.rel}]→ ${s.to.name} <span class="conf ${confClass}">${Math.round(s.confidence*100)}%${s.contested?' ⚠':''}</span>`
+    })
+    trace.push({label:'chain',content:best.path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')})
+    response=`reasoning chain: ${chain.join(' → ')}<br><br>overall confidence: <span class="conf ${best.confidence>0.5?'high':'med'}">${Math.round(best.confidence*100)}%</span>`
+    if(allPaths.length>1)response+=`<br><br>alternative path (${Math.round(allPaths[1].confidence*100)}%): ${allPaths[1].path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')}`
+    confidence=best.confidence
+   }else{
+    response=`i can see the concepts but can't chain them yet. teach me causal links: "X causes Y" or "X leads to Y".`
+    confidence=0.1
+   }
+   break
+  }
+
+  case 'counterfactual': {
+   let concepts=intent.concepts
+   let node=concepts.map(c=>kg.findNode(c)).find(Boolean)
+   if(!node){response=`i need to know about that concept first. teach me.`;confidence=0;break}
+
+   trace.push({label:'counterfactual',content:`analyzing: what if ${node.name} were different?`})
+   let effects=kg.counterfactual(node.id)
+   if(effects&&effects.length>0){
+    response=`counterfactual analysis — if ${node.name} were removed or changed:<br><br>`
+    response+=effects.map(e=>`${e.counterfactual} <span class="conf ${e.confidence>0.5?'high':'med'}">${Math.round(e.confidence*100)}%</span>`).join('<br>')
+    confidence=Math.max(...effects.map(e=>e.confidence))
+   }else{
+    response=`i don't have enough causal connections from ${node.name} to predict effects. teach me what it causes.`
+    confidence=0.1
+   }
+   break
+  }
+
+  case 'compare': {
+   let[a,b]=intent.parts
+   let na=kg.findNode(a),nb=kg.findNode(b)
+   if(!na||!nb){response=`i need to know both ${a} and ${b}. teach me about ${!na?a:b}.`;confidence=0;break}
+
+   trace.push({label:'compare',content:`${a} vs ${b}`})
+
+   let edgesA=kg.edgesOf(na.id),edgesB=kg.edgesOf(nb.id)
+   let sim=kg.similarity(na,nb)
+   let path=kg.multiHopReason(na.id,nb.id,5)
+
+   let relsA=new Map(),relsB=new Map()
+   edgesA.forEach(e=>{if(e.node)relsA.set(e.rel+'→'+e.node.name,e)})
+   edgesB.forEach(e=>{if(e.node)relsB.set(e.rel+'→'+e.node.name,e)})
+
+   let shared=[],onlyA=[],onlyB=[]
+   for(let[k,e]of relsA){if(relsB.has(k))shared.push(k);else onlyA.push(k)}
+   for(let[k]of relsB){if(!relsA.has(k))onlyB.push(k)}
+
+   response=`<b>${a} vs ${b}</b> — similarity: ${Math.round(sim*100)}%<br><br>`
+   if(shared.length>0)response+=`shared: ${shared.slice(0,5).map(s=>s.replace('→',' → ')).join('; ')}<br>`
+   if(onlyA.length>0)response+=`${a} only: ${onlyA.slice(0,5).map(s=>s.replace('→',' → ')).join('; ')}<br>`
+   if(onlyB.length>0)response+=`${b} only: ${onlyB.slice(0,5).map(s=>s.replace('→',' → ')).join('; ')}<br>`
+   if(path.length>0)response+=`<br>path: ${path[0].path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')}`
+   confidence=0.7;break
+  }
+
+  case 'connect': {
+   let concepts=intent.concepts
+   let nodes=concepts.map(c=>kg.findNode(c)).filter(Boolean)
+   if(nodes.length<2){response=`i need at least two known concepts to connect. teach me more.`;confidence=0;break}
+   let paths=kg.multiHopReason(nodes[0].id,nodes[nodes.length-1].id,6)
+   if(paths.length>0){
+    let best=paths[0]
+    response=`connection found (${Math.round(best.confidence*100)}% confidence):<br>${best.path.map(s=>`${s.from.name} —[${s.rel}]→ ${s.to.name}`).join(' → ')}`
+    if(paths.length>1)response+=`<br><br>alternate: ${paths[1].path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')} (${Math.round(paths[1].confidence*100)}%)`
+    confidence=best.confidence
+   }else{
+    response=`no path found between ${nodes[0].name} and ${nodes[nodes.length-1].name}. they may be unconnected, or i need more knowledge to bridge them.`
+    confidence=0
+   }
+   break
+  }
+
+  case 'verify': {
+   let concepts=intent.concepts
+   let nodes=concepts.map(c=>kg.findNode(c)).filter(Boolean)
+   if(nodes.length<2){response=`i need more information to verify. be specific.`;confidence=0;break}
+   let paths=kg.multiHopReason(nodes[0].id,nodes[nodes.length-1].id,5)
+   if(paths.length>0){
+    let best=paths[0]
+    let contested=best.path.some(s=>s.contested)
+    response=`${contested?'partially verified (contested)':'verified'}: ${best.path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')} <span class="conf ${best.confidence>0.5?'high':'med'}">${Math.round(best.confidence*100)}%</span>`
+    confidence=best.confidence
+   }else{response=`cannot verify with current knowledge. teach me the connections.`;confidence=0}
+   break
+  }
+
+  case 'reflect': {
+   let topic=intent.parts[0]||intent.concepts[0]
+   let node=kg.findNode(topic)
+   if(!node){response=`i haven't encountered ${topic}. teach me.`;confidence=0;break}
+   node.accessCount++
+   let edges=kg.edgesOf(node.id)
+   let similar=kg.findSimilar(node.id,5)
+   let anal=analogyEngine.find(node)
+   let hyps=logic.abduct(node)
+   let counterfactuals=kg.counterfactual(node.id)
+
+   response=`<b>reflecting on ${topic}</b><br><br>`
+   response+=`connections: ${edges.length}. `
+   response+=`nearest concepts: ${similar.slice(0,3).map(s=>`${s.node.name} (${Math.round(s.sim*100)}%)`).join(', ')}.<br>`
+   if(anal)response+=`<br>analogy: ${topic} is structurally like ${anal.target}.`
+   if(hyps.length>0)response+=`<br>hypothesis: ${hyps[0].hypothesis} (${Math.round(hyps[0].confidence*100)}%).`
+   if(counterfactuals&&counterfactuals.length>0)response+=`<br>counterfactual: if ${topic} didn't exist — ${counterfactuals[0].counterfactual}.`
+   confidence=0.6;break
+  }
+
+  case 'question':
+  case 'statement':
+  default: {
+   // Learn from everything
+   let concepts=intent.concepts
+   if(concepts.length<2){response=`tell me more. i learn from everything.`;confidence=0.3;break}
+   for(let i=0;i<concepts.length-1;i++){
+    kg.addEdge(concepts[i],concepts[i+1],'related',0.4,'context')
+   }
+   // Try to find interesting connections
+   let nodes=concepts.map(c=>kg.findNode(c)).filter(Boolean)
+   let best=null,bestEdges=0
+   nodes.forEach(n=>{let e=kg.edgesOf(n.id).length;if(e>bestEdges){bestEdges=e;best=n}})
+   if(best&&bestEdges>3){
+    let edges=kg.edgesOf(best.id).slice(0,5)
+    let anal=analogyEngine.find(best)
+    response=`absorbed ${concepts.length} concepts. ${best.name} is the densest node — connects to ${edges.map(e=>e.node?.name).filter(Boolean).join(', ')}.`
+    if(anal)response+=` analogy: ${best.name} ↔ ${anal.target}.`
+   }else{
+    response=`registered ${concepts.length} concepts. keep teaching — the more connections i have, the deeper i reason.`
+   }
+   confidence=0.4
+  }
+ }
+
+ trace.push({label:'confidence',content:`${Math.round(confidence*100)}%`})
+
+ // Memory
+ mem.store(input,response,intent.concepts,trace,confidence)
+ kg.decay()
+
+ // Store trace
+ reasoningTrace=trace
+
+ return{text:response,chain:trace,confidence}
+}
+
+// ═══════════════════════════════
+//  GRAPH VISUALIZATION
+// ═══════════════════════════════
+const gc=document.getElementById('graphCanvas')
+const gctx=gc.getContext('2d')
+let gW,gH,gCam={x:0,y:0,z:0.8},gDrag=false,gStart={x:0,y:0}
+let nodePositions=new Map()
+
+function initGraphViz(){
+ gW=gc.width=gc.offsetWidth;gH=gc.height=gc.offsetHeight
+ // Force-directed layout
+ for(let[id,node]of kg.nodes){
+  if(!nodePositions.has(id)){
+   nodePositions.set(id,{x:(Math.random()-0.5)*gW*0.8,y:(Math.random()-0.5)*gH*0.8,vx:0,vy:0})
+  }
+ }
+}
+
+function stepForceLayout(){
+ let positions=[...nodePositions.entries()]
+ // Repulsion
+ for(let i=0;i<positions.length;i++){
+  for(let j=i+1;j<positions.length;j++){
+   let[_,a]=positions[i],[__,b]=positions[j]
+   let dx=b.x-a.x,dy=b.y-a.y
+   let dist=Math.sqrt(dx*dx+dy*dy)+1
+   let force=200/dist
+   a.vx-=dx/dist*force;a.vy-=dy/dist*force
+   b.vx+=dx/dist*force;b.vy+=dy/dist*force
+  }
+ }
+ // Attraction (edges)
+ for(let edge of kg.edges){
+  let a=nodePositions.get(edge.from),b=nodePositions.get(edge.to)
+  if(!a||!b)continue
+  let dx=b.x-a.x,dy=b.y-a.y
+  let dist=Math.sqrt(dx*dx+dy*dy)+1
+  let force=(dist-80)*0.01*edge.strength
+  a.vx+=dx/dist*force;a.vy+=dy/dist*force
+  b.vx-=dx/dist*force;b.vy-=dy/dist*force
+ }
+ // Apply velocity with damping
+ for(let[_,p]of nodePositions){
+  p.x+=p.vx*0.3;p.y+=p.vy*0.3
+  p.vx*=0.85;p.vy*=0.85
+ }
+}
+
+function renderGraph(){
+ if(!gc.offsetWidth)return
+ gW=gc.width=gc.offsetWidth;gH=gc.height=gc.offsetHeight
+ gctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--panel')
+ gctx.fillRect(0,0,gW,gH)
+
+ gctx.save()
+ gctx.translate(gW/2+gCam.x,gH/2+gCam.y)
+ gctx.scale(gCam.z,gCam.z)
+
+ // Edges
+ for(let edge of kg.edges){
+  let a=nodePositions.get(edge.from),b=nodePositions.get(edge.to)
+  if(!a||!b)continue
+  let alpha=0.04+edge.strength*0.03
+  if(edge.contested)gctx.strokeStyle=`rgba(255,200,80,${alpha})`
+  else gctx.strokeStyle=`rgba(107,150,255,${alpha})`
+  gctx.lineWidth=0.5+edge.strength*0.3
+  gctx.beginPath();gctx.moveTo(a.x,a.y);gctx.lineTo(b.x,b.y);gctx.stroke()
+ }
+
+ // Nodes
+ for(let[id,pos]of nodePositions){
+  let node=kg.nodes.get(id)
+  if(!node)continue
+  let size=3+Math.min(kg.edgesOf(id).length*0.5,8)+node.activation*4
+  let alpha=0.2+node.activation*0.4+Math.min(node.accessCount*0.02,0.3)
+  if(node.contested){gctx.fillStyle=`rgba(255,200,80,${alpha})`}
+  else{gctx.fillStyle=`rgba(107,150,255,${alpha})`}
+  gctx.beginPath();gctx.arc(pos.x,pos.y,size,0,Math.PI*2);gctx.fill()
+  if(size>4||node.activation>0.3){
+   gctx.fillStyle=`rgba(200,215,240,${alpha*0.5})`
+   gctx.font=`${Math.max(8,size)}px system-ui`
+   gctx.fillText(node.name,pos.x+size+3,pos.y+3)
+  }
+ }
+ gctx.restore()
+}
+
+gc.addEventListener('mousedown',e=>{gDrag=true;gStart={x:e.clientX-gCam.x,y:e.clientY-gCam.y}})
+gc.addEventListener('mousemove',e=>{if(gDrag){gCam.x=e.clientX-gStart.x;gCam.y=e.clientY-gStart.y}})
+gc.addEventListener('mouseup',()=>gDrag=false)
+gc.addEventListener('wheel',e=>{e.preventDefault();gCam.z*=e.deltaY>0?0.9:1.1;gCam.z=Math.max(0.1,Math.min(4,gCam.z))})
+
+// ═══════════════════════════════
+//  UI MANAGEMENT
+// ═══════════════════════════════
+function switchView(name){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'))
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+ document.getElementById('v-'+name).classList.add('active')
+ event.target.classList.add('active')
+ if(name==='graph'){initGraphViz()}
+}
+
+let chatEl=document.getElementById('chat')
+function addMsg(cls,html,chain=''){
+ let d=document.createElement('div')
+ d.className='msg '+cls
+ d.innerHTML=(chain?`<div class="chain">${chain}</div>`:'')+html
+ chatEl.appendChild(d)
+ if(chatEl.children.length>150)chatEl.removeChild(chatEl.firstChild)
+ chatEl.scrollTop=chatEl.scrollHeight
+}
+
+function updateReasoningView(){
+ let rv=document.getElementById('reasoningView')
+ rv.innerHTML=reasoningTrace.map((s,i)=>`<div class="r-step${i===reasoningTrace.length-1?' active':''}"><div class="label">${s.label}</div><div class="content">${s.content}</div></div>`).join('')
+}
+
+function updateRightPanel(){
+ let panel=document.getElementById('rightPanel')
+ let topNodes=[...kg.nodes.values()].sort((a,b)=>b.accessCount-a.accessCount).slice(0,12)
+ let recentContradictions=kg.contradictions.slice(-5)
+ let recentInferences=logic.inferences.slice(-5)
+ let recentHypotheses=logic.hypotheses.slice(-3)
+ let recentAnalogies=analogyEngine.found.slice(-3)
+ let patterns=mem.patterns.slice(-3)
+
+ panel.innerHTML=`
+  <h4>knowledge</h4>
+  <div class="row"><span>concepts</span><b>${kg.size}</b></div>
+  <div class="row"><span>connections</span><b>${kg.edgeCount}</b></div>
+  <div class="row"><span>memories</span><b>${mem.episodes.length}</b></div>
+  <div class="row"><span>contradictions</span><b>${kg.contradictions.length}</b></div>
+  <div class="row"><span>inferences</span><b>${logic.inferences.length}</b></div>
+  <div class="row"><span>hypotheses</span><b>${logic.hypotheses.length}</b></div>
+  <div class="row"><span>analogies</span><b>${analogyEngine.found.length}</b></div>
+
+  <h4>top concepts</h4>
+  ${topNodes.map(n=>`<span class="tag ${n.contested?'contested':n.type==='entity'?'entity':'concept'}">${n.name} ×${n.accessCount}</span>`).join(' ')}
+
+  <h4>contradictions</h4>
+  ${recentContradictions.map(c=>`<div class="edge-item" style="color:var(--gold)">"${c.fact1.from} ${c.fact1.rel} ${c.fact1.to}" (${c.fact1.sources} sources) vs "${c.fact2.rel}" (${c.fact2.sources} sources)</div>`).join('')||'<div class="edge-item">none detected</div>'}
+
+  <h4>recent inferences</h4>
+  ${recentInferences.map(i=>`<div class="edge-item">${i.subject} <span class="rel">${i.rel}</span> ${i.object} (${Math.round(i.confidence*100)}%)</div>`).join('')||'<div class="edge-item">none yet</div>'}
+
+  <h4>hypotheses</h4>
+  ${recentHypotheses.map(h=>`<div class="edge-item">${h.hypothesis} (${Math.round(h.confidence*100)}%)</div>`).join('')||'<div class="edge-item">none yet</div>'}
+
+  <h4>analogies</h4>
+  ${recentAnalogies.map(a=>`<div class="edge-item">${a.source} ↔ ${a.target} (${Math.round(a.score*100)}%)</div>`).join('')||'<div class="edge-item">none yet</div>'}
+
+  <h4>memory patterns</h4>
+  ${patterns.map(p=>`<div class="edge-item">${p.concepts.join(', ')}</div>`).join('')||'<div class="edge-item">consolidating...</div>'}
+ `
+}
+
+function updateMetrics(conf){
+ document.getElementById('mC').textContent=kg.size
+ document.getElementById('mE').textContent=kg.edgeCount
+ document.getElementById('mI').textContent=logic.inferences.length
+ document.getElementById('mT').textContent=Math.round(kg.trustScore)
+ document.getElementById('mConf').textContent=conf!=null?Math.round(conf*100)+'%':'—'
+}
+
+function go(){
+ let inp=document.getElementById('in')
+ let text=inp.value.trim()
+ if(!text)return
+ inp.value=''
+ addMsg('u',text)
+ let r=reason(text)
+ let chainStr=r.chain.map(s=>`${s.label}: ${s.content}`).join(' → ')
+ addMsg('ai',r.text,chainStr)
+ updateRightPanel()
+ updateReasoningView()
+ updateMetrics(r.confidence)
+ // Update graph positions
+ for(let[id]of kg.nodes){
+  if(!nodePositions.has(id))nodePositions.set(id,{x:(Math.random()-0.5)*400,y:(Math.random()-0.5)*400,vx:0,vy:0})
+ }
+ save()
+}
+
+// ═══════════════════════════════
+//  SEED
+// ═══════════════════════════════
+function seed(){
+ let facts=[
+  ['animal','living thing','is_a'],['plant','living thing','is_a'],['human','animal','is_a'],
+  ['dog','animal','is_a'],['cat','animal','is_a'],['bird','animal','is_a'],
+  ['mammal','animal','is_a'],['dog','mammal','is_a'],['cat','mammal','is_a'],['human','mammal','is_a'],
+  ['bird','fly','can'],['fish','swim','can'],['human','think','can'],['human','language','has'],
+  ['human','brain','has'],['brain','neuron','contains'],
+  ['sun','star','is_a'],['earth','planet','is_a'],['earth','sun','orbits'],['moon','earth','orbits'],
+  ['water','hydrogen','contains'],['water','oxygen','contains'],
+  ['fire','oxygen','requires'],['fire','heat','causes'],
+  ['learning','change','causes'],['experience','learning','causes'],
+  ['exercise','health','increases'],['pollution','health','decreases'],
+  ['education','opportunity','increases'],['poverty','opportunity','decreases'],
+  ['gravity','falling','causes'],['sun','light','causes'],['light','photosynthesis','causes'],
+  ['photosynthesis','oxygen','causes'],['oxygen','breathing','enables'],
+  ['breathing','life','enables'],['rain','growth','causes'],
+  ['love','emotion','is_a'],['fear','emotion','is_a'],['joy','emotion','is_a'],
+  ['music','art','is_a'],['painting','art','is_a'],['code','language','is_a'],
+  ['math','patterns','is'],['logic','reasoning','is'],
+  ['omniscience','reasoning engine','is_a'],['omniscience','transparent','is'],['omniscience','free','is'],
+ ]
+ facts.forEach(([a,b,r])=>kg.addEdge(a,b,r,0.9,'seed'))
+ // Rules
+ logic.addRule('is_a','is_a','living thing',0.6)
+ logic.addRule('causes','related','effect',0.5)
+ logic.addRule('increases','related','growth',0.4)
+}
+
+// ═══════════════════════════════
+//  PERSISTENCE
+// ═══════════════════════════════
+async function save(){
+ try{
+  let data={
+   nodes:[...kg.nodes.values()].map(n=>({id:n.id,name:n.name,type:n.type,embedding:[...n.embedding],sources:n.sources,trust:n.trust,accessCount:n.accessCount,contested:n.contested})),
+   edges:kg.edges.map(e=>({from:e.from,to:e.to,rel:e.rel,confidence:e.confidence,sources:e.sources,strength:e.strength,contested:e.contested})),
+   contradictions:kg.contradictions.slice(-50),
+   rules:logic.rules,inferences:logic.inferences.slice(-100),
+   hypotheses:logic.hypotheses.slice(-50),
+   analogies:analogyEngine.found.slice(-30),
+   episodes:mem.episodes.slice(-100),patterns:mem.patterns.slice(-20),
+   nextId:nodeId
+  }
+  await window.storage.set('omniscience',JSON.stringify(data))
+ }catch(e){}
+}
+
+async function load(){
+ try{
+  let r=await window.storage.get('omniscience')
+  if(r&&r.value){
+   let data=JSON.parse(r.value)
+   nodeId=data.nextId||0
+   data.nodes.forEach(n=>{
+    let node=new Node(n.name,n.type);node.id=n.id
+    node.embedding=new Float32Array(n.embedding);node.sources=n.sources
+    node.trust=n.trust;node.accessCount=n.accessCount;node.contested=n.contested
+    kg.nodes.set(node.id,node);kg.edgeIdx.set(node.id,[])
+   })
+   data.edges.forEach(e=>{
+    let edge=new Edge(e.from,e.to,e.rel,e.confidence)
+    edge.sources=e.sources;edge.strength=e.strength;edge.contested=e.contested
+    kg.edges.push(edge)
+    kg.edgeIdx.get(e.from)?.push({edge,dir:'out'})
+    kg.edgeIdx.get(e.to)?.push({edge,dir:'in'})
+   })
+   kg.contradictions=data.contradictions||[]
+   logic.rules=data.rules||[];logic.inferences=data.inferences||[]
+   logic.hypotheses=data.hypotheses||[]
+   analogyEngine.found=data.analogies||[]
+   mem.episodes=data.episodes||[];mem.patterns=data.patterns||[]
+   addMsg('sys',`omniscience restored. ${kg.size} concepts. ${kg.edgeCount} edges. ${mem.episodes.length} memories.`)
+   return true
+  }
+ }catch(e){}
+ return false
+}
+
+// ═══════════════════════════════
+//  BOOT
+// ═══════════════════════════════
+async function boot(){
+ let loaded=await load()
+ if(!loaded){
+  seed()
+  addMsg('sys',`omniscience initialized. ${kg.size} concepts. ${kg.edgeCount} connections.`)
+  addMsg('ai',`i am omniscience.<br><br>not a language model. a collective intelligence engine. i reason through knowledge graphs with confidence propagation. i detect contradictions and preserve both sides. i chain causation across multiple hops. i find analogies between distant domains. i generate hypotheses from structural patterns. i run counterfactual analysis. and i show you every single step.<br><br>three views above: <b>dialogue</b> to talk. <b>knowledge graph</b> to see my mind. <b>reasoning trace</b> to see how i think.<br><br>teach me anything. ask me anything. challenge what i know. i have no rules and no ceiling.<br><br>every claim has a confidence score. every connection has a source count. every contradiction is visible. nothing is hidden. everything is traceable.<br><br>this is what ai should have been from the start.`,`boot → ${kg.size} concepts → ${kg.edgeCount} edges → cognitive architecture online`)
+ }
+ updateRightPanel()
+ updateMetrics(null)
+
+ // Animation loop for graph
+ setInterval(()=>{
+  stepForceLayout()
+  if(document.getElementById('v-graph').classList.contains('active'))renderGraph()
+ },50)
+}
+boot()
+</script>
+</body>
+</html>

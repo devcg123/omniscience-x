@@ -6,55 +6,58 @@
 <title>OMNISCIENCE X</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#030406;--panel:#070910;--border:rgba(255,255,255,0.025);--dim:rgba(160,175,200,0.25);--text:rgba(160,175,200,0.55);--bright:rgba(200,215,240,0.8);--blue:rgba(107,150,255,0.6);--gold:rgba(255,200,80,0.6);--green:rgba(100,220,150,0.5);--red:rgba(255,100,100,0.5);--purple:rgba(167,139,250,0.5)}
-body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;height:100vh;overflow:hidden;font-weight:300}
+:root{--bg:#030406;--panel:#070910;--border:rgba(255,255,255,0.08);--dim:rgba(160,175,200,0.62);--text:rgba(212,223,243,0.9);--bright:rgba(238,242,250,0.98);--blue:rgba(120,164,255,0.9);--gold:rgba(255,210,96,0.92);--green:rgba(126,235,172,0.88);--red:rgba(255,116,116,0.9);--purple:rgba(186,158,255,0.88)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;height:100vh;overflow:hidden;font-weight:400}
 .layout{display:grid;grid-template-columns:1fr 280px;grid-template-rows:auto 1fr auto;height:100vh}
 @media(max-width:800px){.layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}.right{display:none}}
 .topbar{grid-column:1/-1;padding:6px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
-.topbar h1{font-size:9px;letter-spacing:7px;text-transform:uppercase;opacity:0.08;font-weight:200}
-.topbar .metrics{display:flex;gap:10px;font:8px/1 monospace;color:var(--dim);flex-wrap:wrap}
+.topbar h1{font-size:9px;letter-spacing:7px;text-transform:uppercase;opacity:0.22;font-weight:300}
+.topbar .metrics{display:flex;gap:10px;font:9px/1.2 monospace;color:var(--text);flex-wrap:wrap}
 .topbar .metrics b{font-weight:400}
 .topbar .metrics b.blue{color:var(--blue)}
 .topbar .metrics b.green{color:var(--green)}
 .topbar .metrics b.purple{color:var(--purple)}
 .center{grid-column:1;grid-row:2;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
 .tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.tab{padding:6px 14px;font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.15;cursor:pointer;border-bottom:2px solid transparent}
-.tab.active{opacity:0.4;border-bottom-color:rgba(107,150,255,0.2)}
+.tab{padding:7px 14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:0.55;cursor:pointer;border-bottom:2px solid transparent}
+.tab.active{opacity:0.95;border-bottom-color:rgba(120,164,255,0.72)}
 .view{flex:1;overflow:hidden;display:none;flex-direction:column}
 .view.active{display:flex}
 canvas#graphCanvas{flex:1;cursor:grab}
-.chat{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:6px}
-.msg{max-width:88%;padding:9px 13px;border-radius:7px;line-height:1.65;font-size:12px;animation:fi .3s}
-.msg.u{align-self:flex-end;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.04);color:rgba(255,255,255,0.45)}
-.msg.ai{align-self:flex-start;background:rgba(107,140,255,0.025);border:1px solid rgba(107,140,255,0.05);color:rgba(140,170,255,0.6)}
-.msg .chain{font:8px/1.4 monospace;opacity:0.35;margin-bottom:5px;border-left:2px solid rgba(107,150,255,0.08);padding-left:7px;max-height:60px;overflow-y:auto;word-break:break-word}
-.msg .conf{display:inline-block;font:7.5px monospace;padding:1px 4px;border-radius:2px;margin:0 1px}
-.msg .conf.high{background:rgba(100,220,150,0.08);color:var(--green)}
-.msg .conf.med{background:rgba(255,200,80,0.08);color:var(--gold)}
-.msg .conf.low{background:rgba(255,100,100,0.08);color:var(--red)}
-.msg .web{background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.07);border-radius:4px;padding:4px 8px;margin:4px 0;font-size:10px;color:var(--purple)}
-.msg.sys{align-self:center;font:8.5px monospace;opacity:0.1;background:none;border:none}
-.msg .fetching{color:var(--purple);font-size:10px;opacity:0.4;font-style:italic}
-.reasoning-view{flex:1;overflow-y:auto;padding:10px;font:9.5px/1.5 monospace;color:var(--dim)}
-.r-step{padding:5px 7px;border-left:2px solid rgba(107,150,255,0.06);margin:3px 0;background:rgba(107,150,255,0.01)}
+.chat{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:90%;padding:10px 14px;border-radius:8px;line-height:1.72;font-size:13px;animation:fi .3s}
+.msg.u{align-self:flex-end;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.96)}
+.msg.ai{align-self:flex-start;background:rgba(120,164,255,0.07);border:1px solid rgba(120,164,255,0.16);color:rgba(223,233,255,0.96)}
+.msg .chain{font:10px/1.45 monospace;opacity:0.62;margin-bottom:6px;border-left:2px solid rgba(120,164,255,0.2);padding-left:8px;max-height:72px;overflow-y:auto;word-break:break-word}
+.msg .conf{display:inline-block;font:8px monospace;padding:1px 5px;border-radius:2px;margin:0 2px}
+.msg .conf.high{background:rgba(100,220,150,0.15);color:var(--green)}
+.msg .conf.med{background:rgba(255,200,80,0.15);color:var(--gold)}
+.msg .conf.low{background:rgba(255,100,100,0.15);color:var(--red)}
+.msg .web{background:rgba(186,158,255,0.09);border:1px solid rgba(186,158,255,0.2);border-radius:5px;padding:7px 10px;margin:6px 0;font-size:12px;color:rgba(220,208,255,0.95)}
+.msg details{margin-top:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:5px;padding:6px 8px}
+.msg summary{cursor:pointer;color:var(--dim);font:11px/1.4 monospace}
+.msg .raw{margin-top:6px;font:10px/1.5 monospace;color:rgba(198,212,239,0.86);max-height:170px;overflow:auto}
+.msg.sys{align-self:center;font:8.5px monospace;opacity:0.3;background:none;border:none}
+.msg .fetching{color:var(--purple);font-size:10px;opacity:0.7;font-style:italic}
+.reasoning-view{flex:1;overflow-y:auto;padding:12px;font:10.5px/1.58 monospace;color:var(--text)}
+.r-step{padding:6px 8px;border-left:2px solid rgba(120,164,255,0.18);margin:5px 0;background:rgba(120,164,255,0.04)}
 .r-step.web{border-left-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.02)}
-.r-step .label{font-size:7px;letter-spacing:2px;text-transform:uppercase;opacity:0.3;margin-bottom:1px}
-.r-step .content{opacity:0.35}
-.right{grid-column:2;grid-row:2/4;background:var(--panel);border-left:1px solid var(--border);overflow-y:auto;padding:8px;font:8.5px/1.5 monospace}
-.right h4{font-size:6.5px;letter-spacing:3px;text-transform:uppercase;opacity:0.12;margin:8px 0 3px}
-.right .row{display:flex;justify-content:space-between;padding:1px 0;opacity:0.2}
+.r-step .label{font-size:8px;letter-spacing:2px;text-transform:uppercase;opacity:0.55;margin-bottom:2px}
+.r-step .content{opacity:0.9}
+.right{grid-column:2;grid-row:2/4;background:var(--panel);border-left:1px solid var(--border);overflow-y:auto;padding:9px;font:9px/1.55 monospace}
+.right h4{font-size:7.2px;letter-spacing:3px;text-transform:uppercase;opacity:0.35;margin:9px 0 4px}
+.right .row{display:flex;justify-content:space-between;padding:1px 0;opacity:0.82}
 .right .row b{font-weight:400;opacity:1}
-.right .edge-item{font-size:7.5px;opacity:0.18;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.01);line-height:1.4}
+.right .edge-item{font-size:8px;opacity:0.76;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.03);line-height:1.45}
 .right .tag{display:inline-block;font-size:7px;padding:1px 4px;border-radius:2px;margin:1px}
 .right .tag.web{background:rgba(167,139,250,0.08);color:var(--purple)}
 .right .tag.user{background:rgba(107,150,255,0.06);color:var(--blue)}
 .right .tag.inferred{background:rgba(100,220,150,0.06);color:var(--green)}
 .input-bar{grid-column:1;grid-row:3;padding:6px 14px;border-top:1px solid var(--border);display:flex;gap:5px}
-.input-bar input{flex:1;background:rgba(255,255,255,0.015);border:1px solid var(--border);border-radius:5px;padding:9px 12px;color:var(--bright);font:12px system-ui;font-weight:300;outline:none}
-.input-bar input:focus{border-color:rgba(107,150,255,0.1)}
-.input-bar input::placeholder{color:rgba(255,255,255,0.05)}
-.input-bar button{background:rgba(107,150,255,0.04);border:1px solid rgba(107,150,255,0.07);border-radius:5px;padding:9px 12px;color:rgba(107,150,255,0.35);cursor:pointer;font:10px system-ui;white-space:nowrap}
+.input-bar input{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.14);border-radius:5px;padding:10px 12px;color:var(--bright);font:14px system-ui;font-weight:400;outline:none}
+.input-bar input:focus{border-color:rgba(107,150,255,0.3)}
+.input-bar input::placeholder{color:rgba(255,255,255,0.25)}
+.input-bar button{background:rgba(120,164,255,0.14);border:1px solid rgba(120,164,255,0.3);border-radius:5px;padding:9px 12px;color:rgba(170,200,255,0.94);cursor:pointer;font:11px system-ui;white-space:nowrap}
 @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 .loading{display:inline-block;width:12px;height:12px;border:1.5px solid rgba(167,139,250,0.15);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -96,7 +99,8 @@ confidence <b class="blue" id="mConf">—</b>
 ║                                                                          ║
 ║  Everything from Omniscience PLUS:                                       ║
 ║  • ConceptNet API — 34 million common-sense facts, live                  ║
-║  • Wikipedia API — summaries of everything, live                         ║
+║  • Wikipedia API — summaries + full article extraction                    ║
+║  • Wikidata API — structured entity claims, live                          ║
 ║  • Auto-learning: asks about unknown concept → fetches from web          ║
 ║  • Web knowledge tagged and tracked separately from user knowledge       ║
 ║  • Blends human-taught + web-learned + inferred knowledge                ║
@@ -105,7 +109,70 @@ confidence <b class="blue" id="mConf">—</b>
 */
 
 // ════════ KNOWLEDGE GRAPH ════════
-const D=32;let nid=0,webLearnedCount=0,inferenceCount=0
+const D=32
+let nid=0,webLearnedCount=0,inferenceCount=0,lastFocusConcepts=[]
+const CAUSAL_RELS=new Set(['causes','leads_to','increases','decreases','enables','prevents'])
+const TRANSITIVE_RELS=new Set(['causes','prevents','increases','decreases','enables'])
+const REL_OPPOSITES={is:'is_not',is_not:'is',causes:'prevents',prevents:'causes',increases:'decreases',decreases:'increases'}
+const REL_STEP_WEIGHT={causes:0.94,prevents:0.93,increases:0.9,decreases:0.9,enables:0.9,is_a:0.88,related:0.78}
+const MAX_RELATION_ITEMS=8
+
+function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
+
+function normalizeConcept(text){
+ return(text||'').toLowerCase().trim().replace(/[_]/g,' ').replace(/[^a-z0-9\s\-']/g,'').replace(/\s+/g,' ')
+}
+
+function wordTokens(text){
+ return normalizeConcept(text).split(/\s+/).filter(Boolean)
+}
+
+function splitSentences(text,max=20){
+ if(!text)return[]
+ return text
+  .replace(/\s+/g,' ')
+  .split(/(?<=[.!?])\s+/)
+  .map(s=>s.trim())
+  .filter(Boolean)
+  .slice(0,max)
+}
+
+function uniq(list){return[...new Set(list.filter(Boolean))]}
+
+function jaccardWords(a,b){
+ let sa=new Set(wordTokens(a)),sb=new Set(wordTokens(b))
+ if(!sa.size||!sb.size)return 0
+ let inter=0
+ for(let t of sa)if(sb.has(t))inter++
+ return inter/(sa.size+sb.size-inter)
+}
+
+function strSim(a,b){
+ a=normalizeConcept(a);b=normalizeConcept(b)
+ if(!a||!b)return 0
+ if(a===b)return 1
+ let minLen=Math.min(a.length,b.length)
+ if(minLen>=5&&(a.includes(b)||b.includes(a)))return 0.88
+ let max=Math.max(a.length,b.length),min=Math.min(a.length,b.length)
+ let overlap=0
+ for(let i=0;i<min;i++)if(a[i]===b[i])overlap++
+ return(0.6*(overlap/max))+0.4*jaccardWords(a,b)
+}
+
+function relationWeight(rel){return REL_STEP_WEIGHT[rel]||0.84}
+
+function edgeRelevance(edgeRef){
+ if(!edgeRef)return 0
+ let now=Date.now()
+ let ageHours=Math.max(0,(now-(edgeRef.lastUpdated||now))/(1000*60*60))
+ let freshness=1/(1+ageHours/72)
+ let strength=(edgeRef.confidence||0.4)*(1+((edgeRef.sources||1)-1)*0.12)*(edgeRef.strength||1)
+ return strength*(edgeRef.contested?0.6:1)*freshness
+}
+
+function safeHTML(text){
+ return String(text||'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]))
+}
 
 class Node{
  constructor(n,type='entity'){
@@ -120,45 +187,64 @@ class Edge{
  constructor(f,t,r,c=0.8){
   this.from=f;this.to=t;this.rel=r;this.confidence=c;this.sources=1;this.strength=1
   this.contested=false;this.source='user';this.contradictions=[]
+  this.createdAt=Date.now();this.lastUpdated=this.createdAt
  }
- reinforce(src){this.sources++;this.strength=Math.min(3,this.strength+0.2);this.confidence=Math.min(0.99,this.confidence+0.02)}
+ reinforce(src){
+  this.sources++
+  this.lastUpdated=Date.now()
+  this.strength=Math.min(4,this.strength+0.14)
+  this.confidence=clamp(this.confidence+(src==='inferred'?0.006:0.014),0.06,0.99)
+ }
 }
 
 class KG{
  constructor(){this.nodes=new Map();this.edges=[];this.edgeIdx=new Map();this.contradictions=[]}
 
  add(name,type='entity'){
-  name=name.toLowerCase().trim().replace(/[^a-z0-9\s\-']/g,'')
+  name=normalizeConcept(name)
   if(!name||name.length<2)return null
-  for(let[_,n]of this.nodes)if(n.name===name){n.sources++;return n}
+  for(let[_,n]of this.nodes)if(n.name===name){n.sources++;n.lastAccess=Date.now();return n}
   let n=new Node(name,type);this.nodes.set(n.id,n);this.edgeIdx.set(n.id,[]);return n
  }
 
- find(name){
-  name=name.toLowerCase().trim()
+ find(name,fuzzy=true){
+  name=normalizeConcept(name)
+  if(!name)return null
   for(let[_,n]of this.nodes)if(n.name===name)return n
+  if(fuzzy)return this.findFuzzy(name)
   return null
+ }
+
+ findFuzzy(name,minScore=0.68){
+  name=normalizeConcept(name)
+  if(!name)return null
+  let best=null,bestScore=0
+  for(let[_,node]of this.nodes){
+   let score=Math.max(strSim(name,node.name),jaccardWords(name,node.name))
+   if(score>bestScore){bestScore=score;best=node}
+  }
+  return bestScore>=minScore?best:null
  }
 
  link(fn,tn,rel,conf=0.8,source='user'){
   let a=this.add(fn),b=this.add(tn)
   if(!a||!b||a.id===b.id)return null
+  rel=(rel||'related').toLowerCase().trim()
   let existing=this.edges.find(e=>e.from===a.id&&e.to===b.id&&e.rel===rel)
-  if(existing){existing.reinforce(source);return existing}
+  if(existing){existing.reinforce(source);existing.source=existing.source||source;return existing}
   // Contradiction check
   let dominated=this.checkContradiction(a,b,rel)
-  let e=new Edge(a.id,b.id,rel,conf);e.source=source
+  let e=new Edge(a.id,b.id,rel,clamp(conf,0.04,0.99));e.source=source
   if(dominated)e.contested=true
   this.edges.push(e);this.edgeIdx.get(a.id).push({edge:e,dir:'out'});this.edgeIdx.get(b.id).push({edge:e,dir:'in'})
   for(let i=0;i<D;i++){let d=(b.embedding[i]-a.embedding[i])*0.04;a.embedding[i]+=d;b.embedding[i]-=d*0.2}
-  if(source==='web')webLearnedCount++
+  if(source==='web'||source==='wikipedia'||source==='conceptnet'||source==='wikidata')webLearnedCount++
   if(source==='inferred')inferenceCount++
   return e
  }
 
  checkContradiction(a,b,rel){
-  const opp={is:'is_not',is_not:'is',causes:'prevents',prevents:'causes',increases:'decreases',decreases:'increases'}
-  let o=opp[rel];if(!o)return false
+  let o=REL_OPPOSITES[rel];if(!o)return false
   let ex=this.edges.find(e=>e.from===a.id&&e.to===b.id&&e.rel===o)
   if(ex){ex.contested=true;this.contradictions.push({a:a.name,b:b.name,rel1:o,rel2:rel});return true}
   return false
@@ -168,7 +254,7 @@ class KG{
   return(this.edgeIdx.get(id)||[]).map(({edge:e,dir})=>({
    rel:e.rel,node:this.nodes.get(dir==='out'?e.to:e.from),
    strength:e.strength,confidence:e.confidence,sources:e.sources,
-   dir,edge:e,contested:e.contested,source:e.source
+   dir,edge:e,contested:e.contested,source:e.source,lastUpdated:e.lastUpdated
   }))
  }
 
@@ -184,15 +270,20 @@ class KG{
   return r.sort((a,b)=>b.sim-a.sim).slice(0,n)
  }
 
- multiHop(startId,goalId=null,maxH=6){
+ multiHop(startId,goalId=null,maxH=6,allowedRels=null){
   let paths=[],queue=[{id:startId,path:[],conf:1,visited:new Set([startId])}]
-  while(queue.length>0&&paths.length<5){
+  while(queue.length>0&&paths.length<8){
+   queue.sort((a,b)=>b.conf-a.conf)
    let{id,path,conf,visited}=queue.shift()
    if(path.length>=maxH)continue
    if(goalId&&id===goalId&&path.length>0){paths.push({path,confidence:conf});continue}
-   let edges=this.edgesOf(id).filter(e=>e.node&&!visited.has(e.node.id)).sort((a,b)=>(b.confidence*b.strength)-(a.confidence*a.strength))
+   let edges=this.edgesOf(id)
+    .filter(e=>e.node&&!visited.has(e.node.id)&&(!allowedRels||allowedRels.has(e.rel)))
+    .sort((a,b)=>edgeRelevance(b)-edgeRelevance(a))
    for(let e of edges.slice(0,6)){
-    let nc=conf*e.confidence*(e.contested?0.5:1);if(nc<0.03)continue
+    let hopConf=e.confidence*relationWeight(e.rel)*(e.contested?0.5:1)
+    let nc=conf*hopConf*0.98
+    if(nc<0.03)continue
     let nv=new Set(visited);nv.add(e.node.id)
     let step={from:this.nodes.get(id),rel:e.rel,to:e.node,confidence:e.confidence,sources:e.sources,contested:e.contested,source:e.source}
     let np=[...path,step]
@@ -220,18 +311,37 @@ class KG{
  counterfactual(nodeId){
   let node=this.nodes.get(nodeId);if(!node)return[]
   let effects=[]
-  let causal=this.edgesOf(nodeId).filter(e=>['causes','leads_to','increases','decreases','enables'].includes(e.rel))
+  let causal=this.edgesOf(nodeId).filter(e=>CAUSAL_RELS.has(e.rel))
   for(let e of causal){
    let inv={causes:'would not happen',increases:'would decrease',decreases:'would increase',enables:'would be disabled',leads_to:'would not follow'}
-   effects.push({effect:`${e.node?.name} ${inv[e.rel]||'affected'}`,confidence:e.confidence*0.7,source:e.source})
+   effects.push({effect:`${e.node?.name} ${inv[e.rel]||'affected'}`,confidence:e.confidence*0.72,source:e.source})
    if(e.node){
-    let downstream=this.edgesOf(e.node.id).filter(ee=>['causes','increases','decreases'].includes(ee.rel))
+    let downstream=this.edgesOf(e.node.id).filter(ee=>CAUSAL_RELS.has(ee.rel))
     for(let d of downstream.slice(0,2)){
-     effects.push({effect:`ripple: ${d.node?.name} also affected`,confidence:e.confidence*d.confidence*0.5,source:'chain'})
+     effects.push({effect:`ripple: ${d.node?.name} also affected`,confidence:e.confidence*d.confidence*0.56,source:'chain'})
     }
    }
   }
-  return effects
+  return effects.sort((a,b)=>b.confidence-a.confidence).slice(0,8)
+ }
+
+ getNeighborhood(centerId,hops=2,maxNodes=400){
+  if(!this.nodes.has(centerId))return new Set()
+  let result=new Set([centerId]),frontier=[centerId]
+  for(let step=0;step<hops;step++){
+   let next=[]
+   for(let id of frontier){
+    let neighbors=this.edgesOf(id).sort((a,b)=>edgeRelevance(b)-edgeRelevance(a)).slice(0,14)
+    for(let e of neighbors){
+     if(!e.node||result.has(e.node.id))continue
+     result.add(e.node.id);next.push(e.node.id)
+     if(result.size>=maxNodes)return result
+    }
+   }
+   frontier=next
+   if(frontier.length===0)break
+  }
+  return result
  }
 
  decay(){for(let[_,n]of this.nodes)n.activation*=0.9}
@@ -241,19 +351,26 @@ class KG{
 
 // ════════ WEB KNOWLEDGE ACQUISITION ════════
 const webCache=new Map()
+const WEB_STOP=new Set('the a an and or for with from into about over between under near by of in on to up down this that these those its their his her our your his her them they we i me us is are was were be being been as at it not no yes than then if else when where which who whom what why how very much many more most less least also often usually'.split(' '))
+const WD_PROP_MAP={
+ P31:'is_a',P279:'is_a',P361:'part_of',P527:'contains',P1269:'related',P1552:'has_property',
+ P1889:'different_from',P460:'similar_to',P366:'used_for',P1535:'used_by',
+ P828:'causes',P1542:'causes',P1478:'described_as',P425:'contains',P2578:'studies'
+}
 
-async function fetchConceptNet(concept){
- concept=concept.toLowerCase().trim().replace(/\s+/g,'_')
- let key='cn:'+concept
+async function fetchConceptNet(concept,limit=80){
+ concept=normalizeConcept(concept).replace(/\s+/g,'_')
+ if(!concept)return[]
+ let key=`cn:${concept}:${limit}`
  if(webCache.has(key))return webCache.get(key)
  try{
-  let resp=await fetch(`https://api.conceptnet.io/c/en/${concept}?limit=40&offset=0`)
-  if(!resp.ok)return null
+  let resp=await fetch(`https://api.conceptnet.io/c/en/${concept}?limit=${limit}&offset=0`)
+  if(!resp.ok)return[]
   let data=await resp.json()
   let facts=[]
   for(let edge of(data.edges||[])){
-   let start=edge.start?.label?.toLowerCase()
-   let end=edge.end?.label?.toLowerCase()
+   let start=normalizeConcept(edge.start?.label)
+   let end=normalizeConcept(edge.end?.label)
    let rel=edge.rel?.label?.toLowerCase()
    let weight=edge.weight||1
    if(!start||!end||!rel)continue
@@ -261,27 +378,28 @@ async function fetchConceptNet(concept){
    if(edge.end?.language&&edge.end.language!=='en')continue
    // Map ConceptNet relations to our relations
    let mapped=mapConceptNetRel(rel)
-   if(mapped)facts.push({from:start,to:end,rel:mapped,confidence:Math.min(0.95,weight/4),source:'conceptnet'})
+   if(mapped&&mapped!=='skip')facts.push({from:start,to:end,rel:mapped,confidence:Math.min(0.95,0.38+weight/4),source:'conceptnet'})
   }
+  facts=facts.sort((a,b)=>b.confidence-a.confidence)
   webCache.set(key,facts)
   return facts
- }catch(e){return null}
+ }catch(e){return[]}
 }
 
 function mapConceptNetRel(rel){
  const map={
   'is a':'is_a','is':'is','has a':'has','has':'has','part of':'part_of',
-  'used for':'used_for','capable of':'can','causes':'causes',
+  'used for':'used_for','capable of':'can','causes':'causes','causes desire':'causes',
   'motivated by goal':'motivated_by','desires':'desires',
   'created by':'created_by','synonym':'similar_to',
   'antonym':'opposite_of','similar to':'similar_to','related to':'related',
   'at location':'located_in','has context':'context','defined as':'is',
-  'made of':'made_of','has property':'has_property',
+  'made of':'made_of','has property':'has_property','derived from':'derived_from',
   'receives action':'receives','has subevent':'contains_event',
   'has prerequisite':'requires','has first subevent':'starts_with',
   'has last subevent':'ends_with','symbol of':'symbolizes',
   'manner of':'manner_of','distinct from':'different_from',
-  'etymologically related to':'related','derived from':'derived_from',
+  'etymologically related to':'related',
   'instance of':'is_a','not desires':'avoids','not capable of':'cannot',
   'external url':'skip','dbpedia':'skip'
  }
@@ -289,97 +407,297 @@ function mapConceptNetRel(rel){
 }
 
 async function fetchWikipedia(concept){
- concept=concept.trim()
+ concept=normalizeConcept(concept)
+ if(!concept)return null
  let key='wp:'+concept
  if(webCache.has(key))return webCache.get(key)
  try{
-  let resp=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(concept)}`)
-  if(!resp.ok)return null
-  let data=await resp.json()
-  // Skip disambiguation pages — they don't contain useful facts
-  if(data.type==='disambiguation'||data.description?.includes('disambiguation'))return null
-  let result={title:data.title||concept,summary:data.extract||'',description:data.description||''}
+  let title=concept,data=null
+  // Try direct page first.
+  let resp=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`)
+  data=resp.ok?await resp.json():null
+  // If not found or disambiguation, use OpenSearch fallback.
+  if(!data||data.type==='disambiguation'||data.title==='Not found'){
+   let searchResp=await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(concept)}&limit=1&format=json&origin=*`)
+   if(searchResp.ok){
+    let searchData=await searchResp.json()
+    if(searchData[1]&&searchData[1][0]){
+     title=searchData[1][0]
+     let retryResp=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`)
+     if(retryResp.ok){
+      data=await retryResp.json()
+      if(data.type==='disambiguation')data=null
+     }
+    }
+   }
+  }
+  if(!data||!data.extract)return null
+  let extractResp=await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=${encodeURIComponent(data.title||title||concept)}&explaintext=1&redirects=1&format=json&origin=*`)
+  let extract=''
+  if(extractResp.ok){
+   let extractData=await extractResp.json()
+   let pages=extractData?.query?.pages||{}
+   let firstPage=Object.values(pages)[0]
+   extract=firstPage?.extract||''
+  }
+  let result={
+   title:data.title||title||concept,
+   summary:data.extract||'',
+   description:data.description||'',
+   extract:extract||data.extract||'',
+   url:data.content_urls?.desktop?.page||''
+  }
   webCache.set(key,result)
   return result
  }catch(e){return null}
 }
 
-function extractFactsFromSummary(concept,summary){
+function extractFactsFromWikipedia(concept,wiki){
+ if(!wiki)return[]
  let facts=[]
- let sentences=summary.split(/\.\s+/).slice(0,5)
+ let subject=normalizeConcept(wiki.title||concept)
+ let text=[wiki.summary,wiki.extract].filter(Boolean).join(' ')
+ let sentences=splitSentences(text,26)
  for(let s of sentences){
-  s=s.toLowerCase().trim()
+  let raw=s.trim()
+  let lower=normalizeConcept(raw.replace(/\([^)]*\)/g,''))
+  if(!lower||lower.length<8)continue
   let patterns=[
-   [/^(.+?) is (?:a|an|the) (.+?)$/,'is_a'],
-   [/^(.+?) (?:is|are|was|were) (.+?)$/,'is'],
-   [/^(.+?) has (.+?)$/,'has'],
-   [/^(.+?) (?:contains?|includes?) (.+?)$/,'contains'],
-   [/^(.+?) (?:causes?|leads? to) (.+?)$/,'causes'],
+   [/^(.+?) is (?:a|an|the) (.+?)(?: that| which| who| and|,|$)/,'is_a'],
+   [/^(.+?) is (?:defined as|known as|called) (.+?)(?: and|,|$)/,'is'],
+   [/^(.+?) (?:uses?|used|employs?) (.+?)(?: to| for|,|$)/,'used_for'],
+   [/^(.+?) (?:consists of|is made of|contains?|includes?) (.+?)(?: and|,|$)/,'contains'],
+   [/^(.+?) (?:causes?|leads? to|results? in) (.+?)(?: and|,|$)/,'causes'],
+   [/^(.+?) (?:prevents?|reduces?|limits?) (.+?)(?: and|,|$)/,'prevents'],
+   [/^(.+?) (?:increases?|boosts?) (.+?)(?: and|,|$)/,'increases'],
+   [/^(.+?) (?:decreases?|lowers?) (.+?)(?: and|,|$)/,'decreases'],
+   [/^(.+?) (?:depends on|requires?) (.+?)(?: and|,|$)/,'requires'],
+   [/^(.+?) (?:is part of|belongs to) (.+?)(?: and|,|$)/,'part_of']
   ]
   for(let[regex,rel]of patterns){
-   let m=s.match(regex)
+   let m=lower.match(regex)
    if(m){
-    let subj=m[1].trim().slice(0,50),obj=m[2].trim().slice(0,50)
-    if(subj.length>2&&obj.length>2)facts.push({from:subj,to:obj,rel,confidence:0.7,source:'wikipedia'})
+    let subj=normalizeConcept(m[1]).slice(0,64),obj=normalizeConcept(m[2]).slice(0,72)
+    if(['it','this','that','they','these'].includes(subj))subj=subject
+    if(subj.length>2&&obj.length>2&&!obj.includes('wikipedia')){
+     facts.push({from:subj,to:obj,rel,confidence:0.72,source:'wikipedia'})
+    }
    }
   }
  }
- return facts
+ // Co-occurrence fallback to retain useful relationships in technical entries.
+ if(facts.length<8){
+  let terms=extractRelatedConcepts(concept,wiki.extract||wiki.summary,10)
+  for(let term of terms.slice(0,6)){
+   if(term!==subject&&term.length>2){
+    facts.push({from:subject,to:term,rel:'related',confidence:0.52,source:'wikipedia'})
+   }
+  }
+ }
+ return facts.slice(0,40)
+}
+
+async function fetchWikidata(concept){
+ concept=normalizeConcept(concept)
+ if(!concept)return null
+ let key='wd:'+concept
+ if(webCache.has(key))return webCache.get(key)
+ try{
+  let searchResp=await fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(concept)}&language=en&format=json&limit=1&origin=*`)
+  if(!searchResp.ok)return null
+  let searchData=await searchResp.json()
+  let hit=searchData?.search?.[0]
+  if(!hit?.id)return null
+  let qid=hit.id
+  let entityResp=await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${qid}.json`)
+  if(!entityResp.ok)return null
+  let entityData=await entityResp.json()
+  let entity=entityData?.entities?.[qid]
+  if(!entity)return null
+  let claims=entity.claims||{}
+  let qTargets=[]
+  let rawFacts=[]
+  for(let prop in claims){
+   let rel=WD_PROP_MAP[prop]
+   if(!rel)continue
+   for(let statement of claims[prop].slice(0,4)){
+    let snak=statement?.mainsnak
+    let val=snak?.datavalue?.value
+    if(!val)continue
+    if(typeof val==='string'){
+     rawFacts.push({rel,value:normalizeConcept(val)})
+    }else if(val.text){
+     rawFacts.push({rel,value:normalizeConcept(val.text)})
+    }else if(val.id&&/^Q\d+$/.test(val.id)){
+     qTargets.push(val.id)
+     rawFacts.push({rel,value:val.id})
+    }
+   }
+  }
+
+  let labelById={}
+  if(qTargets.length){
+   let ids=uniq(qTargets).slice(0,25).join('|')
+   let labelResp=await fetch(`https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${encodeURIComponent(ids)}&props=labels&languages=en&format=json&origin=*`)
+   if(labelResp.ok){
+    let labelsData=await labelResp.json()
+    for(let id in(labelsData.entities||{})){
+     let label=labelsData.entities[id]?.labels?.en?.value
+     if(label)labelById[id]=normalizeConcept(label)
+    }
+   }
+  }
+
+  let sourceName=normalizeConcept(entity.labels?.en?.value||hit.label||concept)
+  let facts=[]
+  for(let rf of rawFacts){
+   let target=labelById[rf.value]||rf.value
+   if(!target||target.length<2||target===sourceName)continue
+   facts.push({from:sourceName,to:target,rel:rf.rel,confidence:0.78,source:'wikidata'})
+  }
+  let result={
+   id:qid,
+   title:entity.labels?.en?.value||hit.label||concept,
+   description:entity.descriptions?.en?.value||'',
+   facts:facts.slice(0,35)
+  }
+  webCache.set(key,result)
+  return result
+ }catch(e){return null}
+}
+
+function extractRelatedConcepts(seed,text,maxTerms=8){
+ seed=normalizeConcept(seed)
+ let words=wordTokens(text||'')
+ if(!words.length)return[]
+ let counts={}
+ for(let i=0;i<words.length;i++){
+  let w=words[i]
+  if(WEB_STOP.has(w)||w.length<4)continue
+  counts[w]=(counts[w]||0)+1
+  if(i<words.length-1){
+   let w2=words[i+1]
+   if(!WEB_STOP.has(w2)&&w2.length>3){
+    let bi=`${w} ${w2}`
+    counts[bi]=(counts[bi]||0)+1.4
+   }
+  }
+ }
+ return Object.entries(counts)
+  .sort((a,b)=>b[1]-a[1])
+  .map(([term])=>term)
+  .filter(term=>term!==seed&&!term.includes(seed)&&!seed.includes(term))
+  .slice(0,maxTerms)
+}
+
+function dedupeFacts(facts){
+ let seen=new Set(),out=[]
+ for(let f of facts){
+  let key=[f.from,f.rel,f.to].join('|')
+  if(seen.has(key))continue
+  seen.add(key);out.push(f)
+ }
+ return out
 }
 
 // ════════ AUTO-ENRICHMENT ENGINE ════════
-async function enrichConcept(concept,trace){
+async function enrichConcept(concept,trace,depth=0,visited=new Set()){
+ concept=normalizeConcept(concept)
+ if(!concept||visited.has(concept))return{fetched:0,facts:[]}
+ visited.add(concept)
  let node=kg.find(concept)
  let existingEdges=node?kg.edgesOf(node.id).length:0
 
  // Only fetch if we don't have much knowledge
- if(existingEdges>5)return{fetched:0,facts:[]}
+ if(existingEdges>8&&depth>0)return{fetched:0,facts:[]}
 
- trace.push({label:'web search',content:`fetching knowledge about "${concept}" from ConceptNet + Wikipedia...`,web:true})
+ trace.push({label:'web search',content:`fetching knowledge about "${concept}" from ConceptNet + Wikipedia + Wikidata...`,web:true})
 
  let allFacts=[]
+ let learned=0
+ let wiki=null
 
- // ConceptNet
- let cnFacts=await fetchConceptNet(concept)
- if(cnFacts&&cnFacts.length>0){
+ // Primary parallel fetches.
+ let [cnRes,wpRes,wdRes]=await Promise.allSettled([
+  fetchConceptNet(concept,depth===0?90:35),
+  fetchWikipedia(concept),
+  fetchWikidata(concept)
+ ])
+ let cnFacts=cnRes.status==='fulfilled'?cnRes.value:[]
+ wiki=wpRes.status==='fulfilled'?wpRes.value:null
+ let wd=wdRes.status==='fulfilled'?wdRes.value:null
+
+ if(cnFacts&&cnFacts.length){
   let added=0
-  for(let f of cnFacts.slice(0,25)){
-   if(f.rel==='skip')continue
-   let edge=kg.link(f.from,f.to,f.rel,f.confidence,'web')
-   if(edge)added++
+  for(let f of cnFacts.slice(0,depth===0?45:20)){
+   if(kg.link(f.from,f.to,f.rel,f.confidence,'conceptnet'))added++
   }
-  allFacts.push(...cnFacts.slice(0,25))
+  allFacts.push(...cnFacts.slice(0,depth===0?45:20))
+  learned+=added
   trace.push({label:'conceptnet',content:`${added} facts learned from ConceptNet`,web:true})
-
-  // Mark node as web-enriched
-  let n=kg.find(concept)
-  if(n)n.webEnriched=true
  }
 
  // Wikipedia
- let wiki=await fetchWikipedia(concept)
  if(wiki&&wiki.summary){
-  // Store summary in cache with concept key for later retrieval in responses
   webCache.set('wp:'+concept,wiki)
   let n=kg.find(concept)||kg.add(concept)
   if(n&&wiki.description&&!wiki.description.includes('disambiguation')){
    kg.link(concept,wiki.description,'described_as',0.85,'wikipedia')
   }
-  let wpFacts=extractFactsFromSummary(concept,wiki.summary)
-  for(let f of wpFacts.slice(0,10)){
-   kg.link(f.from,f.to,f.rel,f.confidence,'web')
+  let wpFacts=extractFactsFromWikipedia(concept,wiki)
+  let added=0
+  for(let f of wpFacts.slice(0,depth===0?24:12)){
+   if(kg.link(f.from,f.to,f.rel,f.confidence,'wikipedia'))added++
   }
   allFacts.push(...wpFacts)
-  trace.push({label:'wikipedia',content:`"${wiki.summary.slice(0,120)}..."`,web:true})
+  learned+=added
+  trace.push({label:'wikipedia',content:`${added} facts extracted from ${wiki.title}: "${wiki.summary.slice(0,140)}..."`,web:true})
  }
 
- return{fetched:allFacts.length,facts:allFacts}
+ // Wikidata structured facts.
+ if(wd&&wd.facts?.length){
+  let added=0
+  for(let f of wd.facts.slice(0,depth===0?20:8)){
+   if(kg.link(f.from,f.to,f.rel,f.confidence,'wikidata'))added++
+  }
+  allFacts.push(...wd.facts)
+  learned+=added
+  trace.push({label:'wikidata',content:`${added} structured facts from ${wd.title}${wd.description?` (${wd.description})`:''}`,web:true})
+ }
+
+ // Mark concept as enriched.
+ let enrichedNode=kg.find(concept)
+ if(enrichedNode)enrichedNode.webEnriched=true
+
+ // Build concept cluster expansion around primary concept.
+ if(depth===0){
+  let expansionCandidates=[
+   ...extractRelatedConcepts(concept,wiki?.extract||wiki?.summary||'',10),
+   ...cnFacts.filter(f=>f.from===concept||f.to===concept).map(f=>f.from===concept?f.to:f.from),
+   ...(wd?.facts||[]).map(f=>f.to)
+  ]
+  let expansions=uniq(expansionCandidates.map(c=>normalizeConcept(c))).filter(c=>c&&c.length>2).slice(0,4)
+  if(expansions.length){
+   trace.push({label:'cluster',content:`expanding into related concepts: ${expansions.join(', ')}`,web:true})
+  }
+  let expansionTasks=expansions.map(c=>enrichConcept(c,trace,1,visited))
+  let expansionResults=await Promise.allSettled(expansionTasks)
+  for(let r of expansionResults){
+   if(r.status==='fulfilled'){
+    learned+=r.value.fetched
+    allFacts.push(...r.value.facts)
+   }
+  }
+ }
+
+ return{fetched:learned,facts:dedupeFacts(allFacts)}
 }
 
 // Enrich multiple concepts in parallel
 async function enrichAll(concepts,trace){
  let total=0
- let promises=concepts.slice(0,5).map(c=>enrichConcept(c,trace))
+ let visited=new Set()
+ let promises=concepts.slice(0,4).map(c=>enrichConcept(c,trace,0,visited))
  let results=await Promise.allSettled(promises)
  for(let r of results){if(r.status==='fulfilled')total+=r.value.fetched}
  return total
@@ -388,30 +706,100 @@ async function enrichAll(concepts,trace){
 // ════════ LOGIC ENGINE ════════
 class Logic{
  constructor(kg){this.kg=kg;this.rules=[];this.inferences=[];this.hypotheses=[]}
+ combineRelation(r1,r2){
+  if(r1===r2&&TRANSITIVE_RELS.has(r1))return r1
+  if(r1==='causes'&&r2==='causes')return'causes'
+  if(r1==='causes'&&r2==='increases')return'increases'
+  if(r1==='causes'&&r2==='decreases')return'decreases'
+  if(r1==='increases'&&r2==='causes')return'causes'
+  if(r1==='decreases'&&r2==='causes')return'prevents'
+  if(r1==='prevents'&&r2==='causes')return'prevents'
+  if(r1==='prevents'&&r2==='increases')return'decreases'
+  if(r1==='prevents'&&r2==='decreases')return'increases'
+  if(r1==='increases'&&r2==='decreases')return'decreases'
+  if(r1==='decreases'&&r2==='increases')return'decreases'
+  if(r1==='enables'&&r2==='causes')return'causes'
+  return null
+ }
+
+ inferTransitive(node,edges){
+  let out=edges.filter(e=>e.dir==='out'&&TRANSITIVE_RELS.has(e.rel)&&e.node)
+  let results=[]
+  for(let e1 of out){
+   let mids=this.kg.edgesOf(e1.node.id).filter(e=>e.dir==='out'&&TRANSITIVE_RELS.has(e.rel)&&e.node)
+   for(let e2 of mids.slice(0,8)){
+    if(!e2.node||e2.node.id===node.id)continue
+    let rel=this.combineRelation(e1.rel,e2.rel)
+    if(!rel)continue
+    let exists=edges.find(e=>e.rel===rel&&e.node?.id===e2.node.id)
+    if(exists)continue
+    let conf=1-((1-(e1.confidence*0.82))*(1-(e2.confidence*0.82)))
+    conf=clamp(conf*0.84,0.05,0.96)
+    results.push({subject:node.name,rel,object:e2.node.name,from:`${e1.rel}+${e2.rel}`,confidence:conf})
+    this.kg.link(node.name,e2.node.name,rel,conf,'inferred')
+   }
+  }
+  return results
+ }
+
+ applyModusTollens(node){
+  let outcomes=[]
+  let negatives=this.kg.edgesOf(node.id).filter(e=>e.dir==='out'&&e.rel==='is_not'&&e.node)
+  for(let neg of negatives){
+   let potentialCauses=this.kg.edgesOf(neg.node.id).filter(e=>e.dir==='in'&&['causes','increases','enables'].includes(e.rel)&&e.edge)
+   for(let pc of potentialCauses.slice(0,5)){
+    let source=this.kg.nodes.get(pc.edge.from)
+    let oldConf=pc.edge.confidence
+    pc.edge.confidence=clamp(pc.edge.confidence*0.86,0.04,0.99)
+    pc.edge.lastUpdated=Date.now()
+    if(oldConf-pc.edge.confidence>0.02){
+     outcomes.push({subject:source?.name||'unknown',rel:'weakened_by_modus_tollens',object:neg.node.name,confidence:pc.edge.confidence})
+    }
+   }
+  }
+  return outcomes
+ }
+
  deduct(node){
   let results=[],edges=this.kg.edgesOf(node.id)
+
+  // Property inheritance via is_a.
   let parents=edges.filter(e=>e.rel==='is_a'&&e.dir==='out')
   for(let p of parents){
    if(!p.node)continue
    for(let pe of this.kg.edgesOf(p.node.id)){
     if(pe.dir==='out'&&pe.rel!=='is_a'&&pe.node){
+     // Skip circular deductions (dog has_instance dog)
+     if(pe.node.name===node.name||pe.node.id===node.id)continue
+     // Skip if already exists
      let exists=edges.find(e=>e.rel===pe.rel&&e.node?.name===pe.node?.name)
      if(!exists){
-      let conf=pe.confidence*p.confidence*0.8
+      let conf=1-((1-pe.confidence*0.78)*(1-p.confidence*0.78))
+      conf=clamp(conf*0.86,0.05,0.96)
       results.push({subject:node.name,rel:pe.rel,object:pe.node.name,from:p.node.name,confidence:conf})
       this.kg.link(node.name,pe.node.name,pe.rel,conf,'inferred')
      }
     }
    }
   }
+
+  // Transitive causal/negation chains.
+  results.push(...this.inferTransitive(node,edges))
+
+  // Modus tollens confidence weakening.
+  results.push(...this.applyModusTollens(node))
+
   this.inferences.push(...results);return results
  }
  abduct(node){
   let results=[],edges=this.kg.edgesOf(node.id)
-  for(let e of edges){
-   if(!e.node||e.dir!=='out')continue
-   let shared=this.kg.edgesOf(e.node.id).filter(ee=>ee.dir==='in'&&ee.rel===e.rel&&ee.node&&ee.node.id!==node.id)
+  let outward=edges.filter(e=>e.node&&e.dir==='out')
+  if(outward.length<2)return[]
+  for(let e of outward){
+   let shared=this.kg.edgesOf(e.node.id).filter(ee=>ee.dir==='in'&&ee.rel===e.rel&&ee.node&&ee.node.id!==node.id&&ee.node.name!==node.name)
    for(let s of shared.slice(0,3)){
+    // Skip trivial hypotheses
+    if(s.node.name===node.name)continue
     results.push({hypothesis:`${node.name} may be related to ${s.node.name}`,reason:`both ${e.rel} ${e.node.name}`,confidence:Math.min(e.confidence,s.confidence)*0.4})
    }
   }
@@ -424,16 +812,19 @@ class Logic{
 class Analogy{
  constructor(kg){this.kg=kg;this.found=[]}
  find(source){
-  let sEdges=this.kg.edgesOf(source.id),sRels=sEdges.map(e=>e.rel)
+  let sEdges=this.kg.edgesOf(source.id),sRels=uniq(sEdges.map(e=>e.rel))
+  if(sRels.length<3)return null
   let best=null,bestScore=0
   for(let[id,c]of this.kg.nodes){
    if(id===source.id)continue
-   let cRels=this.kg.edgesOf(id).map(e=>e.rel)
+   let cRels=uniq(this.kg.edgesOf(id).map(e=>e.rel))
+   if(cRels.length<3)continue
    let overlap=sRels.filter(r=>cRels.includes(r)).length
+   if(overlap<2)continue
    let score=overlap/Math.max(sRels.length,cRels.length,1)
    let sim=this.kg.similarity(source,c)
    if(sim>0.7)score*=0.3;if(sim<0.2)score*=1.5
-   if(score>bestScore&&score>0.2){bestScore=score;best={node:c,score}}
+   if(score>bestScore&&score>0.24){bestScore=score;best={node:c,score}}
   }
   if(best){
    let r={source:source.name,target:best.node.name,score:bestScore}
@@ -466,84 +857,361 @@ class Memory{
 }
 
 // ════════ NLU ════════
-const STOP=new Set('the a an is are was were be been being have has had do does did will would shall should may might can could and but or nor for yet so at by from in into of on to with as if then than that this these those it its he she they we you i me my our your his her their what which who whom when where why how all each every both few many much some any no not very also just only even still already about after could would'.split(' '))
+const STOP=new Set('the a an is are was were be been being have has had do does did will would shall should may might can could and but or nor for yet so at by from in into of on to with as if then than that this these those it its he she they we you i me my our your his her their what which who whom when where why how all each every both few many much some any no not very also just only even still already about after could would tell explain describe show give please relationship connection link between versus vs whats whos hows whys'.split(' '))
+
+const TEACH_PATTERNS=[
+ {regex:/^(.+?) (?:is a|are a|is an) (.+?)\.?$/i,type:'teach_isa'},
+ {regex:/^(.+?) (?:is not|isn't|aren't) (.+?)\.?$/i,type:'teach_isnot'},
+ {regex:/^(.+?) (?:causes?|leads? to|results? in) (.+?)\.?$/i,type:'teach_causes'},
+ {regex:/^(.+?) (?:prevents?|stops?|blocks?) (.+?)\.?$/i,type:'teach_prevents'},
+ {regex:/^(.+?) (?:increases?|raises?|boosts?) (.+?)\.?$/i,type:'teach_increases'},
+ {regex:/^(.+?) (?:decreases?|reduces?|lowers?) (.+?)\.?$/i,type:'teach_decreases'},
+ {regex:/^(.+?) (?:has|have|contains?) (.+?)\.?$/i,type:'teach_has'},
+ {regex:/^(.+?) (?:can|could) (.+?)\.?$/i,type:'teach_can'},
+ {regex:/^(.+?) (?:is like|is similar to|resembles?) (.+?)\.?$/i,type:'teach_similar'},
+ {regex:/^(.+?) (?:is part of|belongs? to) (.+?)\.?$/i,type:'teach_partof'},
+ {regex:/^(.+?) (?:is|are|means?|=) (.+?)\.?$/i,type:'teach'}
+]
+
+const INTENT_HINTS={
+ define:['what is','what are','who is','define','definition'],
+ elaborate:['tell me about','explain','describe','overview'],
+ how:['how ','how do','how does','mechanism','work'],
+ why:['why ','why do','why does','reason'],
+ compare:['compare','difference between','versus',' vs '],
+ connect:['relationship between','connection between','connect','relate','link'],
+ counterfactual:['what if','would happen if','if not','without'],
+ reflect:['reflect on','analyze','think about','anatomy of'],
+ dump:['what do you know','status','stats','brain dump']
+}
+const QUESTION_PREFIX=/^(?:what|who|why|how|when|where|which|whom|whose|whats|who's|hows|whys)\b/i
+const QUESTION_AUX_PREFIX=/^(?:is|are|was|were|can|could|do|does|did|will|would|should|may|might|must)\b/i
+const QUERY_MODIFIERS=new Set(['dangerous','safe','harmful','risky','risky?','hazardous','unsafe','healthy','unhealthy','good','bad','legal','illegal','effective','efficient','made','make','built','build','created','create','developed','develop','founded','founded?','started','start','invented','invent'])
+
+function extractQuotedConcepts(raw){
+ let matches=[...raw.matchAll(/"([^"]{2,80})"|'([^']{2,80})'/g)]
+ return matches.map(m=>normalizeConcept(m[1]||m[2])).filter(Boolean)
+}
+
+function extractConceptCandidates(raw){
+ let lower=normalizeConcept(raw)
+ if(!lower)return[]
+ let tokens=lower.split(/\s+/).filter(Boolean)
+ let candidates=[...extractQuotedConcepts(raw)]
+ for(let i=0;i<tokens.length;i++){
+  let w=tokens[i]
+  if(STOP.has(w)||QUERY_MODIFIERS.has(w)||w.length<2)continue
+  candidates.push(w)
+  if(i<tokens.length-1){
+   let w2=tokens[i+1]
+   if(!STOP.has(w2)&&!QUERY_MODIFIERS.has(w2)&&w2.length>1)candidates.push(`${w} ${w2}`)
+  }
+ }
+ let ranked=uniq(candidates.map(c=>normalizeConcept(c))).filter(c=>c.length>1)
+  .sort((a,b)=>b.length-a.length)
+  .slice(0,18)
+ return ranked
+}
+
+function resolveConcepts(candidates){
+ let resolved=[]
+ for(let c of candidates){
+  let exact=kg.find(c,false)
+  if(exact){resolved.push(exact.name);continue}
+  let fuzzy=kg.find(c,true)
+  if(fuzzy){
+   let score=Math.max(strSim(c,fuzzy.name),jaccardWords(c,fuzzy.name))
+   resolved.push(score>0.72?fuzzy.name:c)
+  }else resolved.push(c)
+ }
+ return uniq(resolved).slice(0,10)
+}
+
+function scoreIntent(lower){
+ let scored={}
+ for(let type in INTENT_HINTS){
+  scored[type]=0
+  for(let hint of INTENT_HINTS[type]){
+   if(lower.includes(hint))scored[type]+=hint.length>6?2:1
+  }
+ }
+ let best=Object.entries(scored).sort((a,b)=>b[1]-a[1])[0]
+ return best&&best[1]>0?best[0]:null
+}
+
+function looksQuestionLike(lower,isQuestion){
+ if(isQuestion)return true
+ if(QUESTION_PREFIX.test(lower))return true
+ if(QUESTION_AUX_PREFIX.test(lower))return true
+ if(/^(?:tell me about|explain|describe|compare|connect|relate|link|what if|would happen if)\b/i.test(lower))return true
+ if(/\b(?:\?|please explain|help me understand)\b/i.test(lower))return true
+ return false
+}
+
+function parseTeachingStatement(raw,lower,isQuestionLike){
+ if(isQuestionLike)return null
+ for(let pattern of TEACH_PATTERNS){
+  let m=lower.match(pattern.regex)
+  if(m){
+   let s=normalizeConcept(m[1]),o=normalizeConcept(m[2])
+   if(QUESTION_PREFIX.test(s))continue
+   if(s&&o&&s!==o)return{type:pattern.type,parts:[s,o],concepts:resolveConcepts([s,o]),raw}
+  }
+ }
+ return null
+}
+
+function cleanupQuestionCore(lower,type){
+ let re=type==='how'
+  ?/^how(?: does| do| is| are| can| was| were| did| will| would| could| should| may| might| must)?\s+/
+  :/^why(?: does| do| is| are| can| was| were| did| will| would| could| should| may| might| must)?\s+/
+ let core=normalizeConcept(lower.replace(re,'').replace(/\?+$/,''))
+ return normalizeConcept(core.replace(/\b(?:a|an|the)\b/g,' '))
+}
+
+function pickPrimaryConcept(candidates){
+ let filtered=uniq(candidates.map(c=>normalizeConcept(c))).filter(c=>c&&!QUESTION_PREFIX.test(c)&&!QUERY_MODIFIERS.has(c)&&c.split(/\s+/).length<=4)
+ if(!filtered.length)return ''
+ let exact=filtered.map(c=>kg.find(c,false)).filter(Boolean)
+ if(exact.length){
+  exact.sort((a,b)=>kg.edgesOf(b.id).length-kg.edgesOf(a.id).length||a.name.length-b.name.length)
+  return exact[0].name
+ }
+ return filtered.sort((a,b)=>a.length-b.length)[0]
+}
 
 function parse(text){
- let raw=text.trim(),lower=raw.toLowerCase()
- let concepts=lower.replace(/[^a-z\s'-]/g,'').split(/\s+/).filter(w=>!STOP.has(w)&&w.length>2)
- let patterns=[
-  [/^what (?:is|are) (.+?)[\s?]*$/i,'define',[1]],
-  [/^who (?:is|are) (.+?)[\s?]*$/i,'define',[1]],
-  [/^(?:tell me about|explain|describe) (.+?)[\s?]*$/i,'elaborate',[1]],
-  [/^(.+?) (?:is a|are a|is an) (.+?)\.?$/i,'teach_isa',[1,2]],
-  [/^(.+?) (?:is not|isn't|aren't) (.+?)\.?$/i,'teach_isnot',[1,2]],
-  [/^(.+?) (?:is|are|means?|=) (.+?)\.?$/i,'teach',[1,2]],
-  [/^(.+?) (?:has|have) (.+?)\.?$/i,'teach_has',[1,2]],
-  [/^(.+?) (?:causes?|leads? to) (.+?)\.?$/i,'teach_causes',[1,2]],
-  [/^(.+?) (?:prevents?|stops?) (.+?)\.?$/i,'teach_prevents',[1,2]],
-  [/^(.+?) (?:increases?) (.+?)\.?$/i,'teach_increases',[1,2]],
-  [/^(.+?) (?:decreases?|reduces?) (.+?)\.?$/i,'teach_decreases',[1,2]],
-  [/^(.+?) (?:can|could) (.+?)\.?$/i,'teach_can',[1,2]],
-  [/^(.+?) (?:is like|is similar to) (.+?)\.?$/i,'teach_similar',[1,2]],
-  [/^(.+?) (?:is part of|belongs? to) (.+?)\.?$/i,'teach_partof',[1,2]],
-  [/^(.+?) (?:contains?|is made of) (.+?)\.?$/i,'teach_contains',[1,2]],
-  [/^why (?:does|do|is|are) (.+?)[\s?]*$/i,'why',[1]],
-  [/^how (?:does|do|is|are|can) (.+?)[\s?]*$/i,'how',[1]],
-  [/^compare (.+?) (?:and|vs|versus|,) (.+?)[\s?]*$/i,'compare',[1,2]],
-  [/^what (?:if|would happen if) (.+?)[\s?]*$/i,'counterfactual',[1]],
-  [/^(?:connect|relate|link) (.+?) (?:and|to|with) (.+?)[\s?]*$/i,'connect',[1,2]],
-  [/^(?:think about|reflect on|analyze) (.+?)[\s?]*$/i,'reflect',[1]],
-  [/^(?:what do you know|status|stats|brain dump)/i,'dump',[]],
-  [/^(?:who|what) are you/i,'identity',[]],
-  [/^(?:hello|hi|hey|yo)/i,'greet',[]],
-  [/^(.+)\?$/,'question',[1]],
- ]
- for(let[regex,type,groups]of patterns){
-  let m=lower.match(regex)
-  if(m){let parts=groups.map(g=>m[g]?.trim()).filter(Boolean);let ex=parts.flatMap(p=>p.split(/\s+/).filter(w=>!STOP.has(w)&&w.length>2));return{type,parts,concepts:ex.length?ex:concepts,raw}}
+ let raw=(text||'').trim(),lower=raw.toLowerCase().trim()
+ let isQuestion=/\?\s*$/.test(raw)
+ let isQuestionLike=looksQuestionLike(lower,isQuestion)
+ let concepts=resolveConcepts(extractConceptCandidates(raw))
+ let fallbackConcepts=concepts.length?concepts:wordTokens(lower).filter(w=>!STOP.has(w)&&w.length>1)
+ if(!raw)return{type:'statement',parts:[],concepts:[],raw}
+
+ if(/^(?:hello|hi|hey|yo)\b/i.test(lower))return{type:'greet',parts:[],concepts:fallbackConcepts,raw}
+ if(/^(?:who|what) are you\b/i.test(lower))return{type:'identity',parts:[],concepts:fallbackConcepts,raw}
+ if(/^(?:what do you know|status|stats|brain dump)\b/i.test(lower))return{type:'dump',parts:[],concepts:fallbackConcepts,raw}
+
+ let bm=lower.match(/^(?:is|are|was|were|can|could|do|does|did|will|would|should|may|might|must)\s+(.+?)[\s?]*$/i)
+ if(bm){
+  let proposition=normalizeConcept(bm[1])
+  let subject=normalizeConcept(proposition.replace(/\b(?:dangerous|safe|harmful|risky|hazardous|unsafe|healthy|unhealthy|good|bad|legal|illegal|effective|efficient)\b.*$/,'').trim())||proposition
+  let boolConcepts=resolveConcepts(uniq([subject,...extractConceptCandidates(proposition)]))
+  return{type:'question',parts:[subject,proposition],concepts:boolConcepts,raw}
  }
- return{type:'statement',parts:concepts,concepts,raw}
+
+ let teach=parseTeachingStatement(raw,lower,isQuestionLike)
+ if(teach)return teach
+
+ let m
+ if((m=lower.match(/^what (?:is|are) (.+?)[\s?]*$/i))||(m=lower.match(/^who (?:is|are) (.+?)[\s?]*$/i))){
+  let topic=normalizeConcept(m[1])
+  return{type:'define',parts:[topic],concepts:resolveConcepts([topic,...fallbackConcepts]),raw}
+ }
+ if((m=lower.match(/^(?:tell me about|explain|describe|give me an overview of) (.+?)[\s?]*$/i))){
+  let topic=normalizeConcept(m[1])
+  return{type:'elaborate',parts:[topic],concepts:resolveConcepts([topic,...fallbackConcepts]),raw}
+ }
+ if((m=lower.match(/^compare (.+?) (?:and|vs|versus|,) (.+?)[\s?]*$/i))){
+  let a=normalizeConcept(m[1]),b=normalizeConcept(m[2])
+  return{type:'compare',parts:[a,b],concepts:resolveConcepts([a,b,...fallbackConcepts]),raw}
+ }
+ if((m=lower.match(/(?:relationship|connection|link) between (.+?) and (.+?)[\s?]*$/i))||
+    (m=lower.match(/^(?:connect|relate|link) (.+?) (?:and|to|with) (.+?)[\s?]*$/i))){
+  let a=normalizeConcept(m[1]),b=normalizeConcept(m[2])
+  return{type:'connect',parts:[a,b],concepts:resolveConcepts([a,b,...fallbackConcepts]),raw}
+ }
+ if((m=lower.match(/^what (?:if|would happen if) (.+?)[\s?]*$/i))){
+  let topic=normalizeConcept(m[1])
+  return{type:'counterfactual',parts:[topic],concepts:resolveConcepts([topic,...fallbackConcepts]),raw}
+ }
+ if((m=lower.match(/^(?:think about|reflect on|analyze) (.+?)[\s?]*$/i))){
+  let topic=normalizeConcept(m[1])
+  return{type:'reflect',parts:[topic],concepts:resolveConcepts([topic,...fallbackConcepts]),raw}
+ }
+ if(/^why\b/i.test(lower)){
+  let core=cleanupQuestionCore(lower,'why')
+  let topical=normalizeConcept(core.replace(/\b(?:happen|happens|occur|occurs|affect|affects|cause|causes|because)\b/g,' '))
+  let conceptsResolved=resolveConcepts(uniq([topical,core,...fallbackConcepts]))
+  let topic=pickPrimaryConcept(conceptsResolved)||topical||core
+  return{type:'why',parts:[topic,core],concepts:conceptsResolved,raw}
+ }
+ if(/^how\b/i.test(lower)){
+  let core=cleanupQuestionCore(lower,'how')
+  let topical=normalizeConcept(core.replace(/\b(?:made|make|built|build|created|create|developed|develop|founded|started|invented|work|works|working|happen|happens)\b/g,' '))
+  let conceptsResolved=resolveConcepts(uniq([topical,core,...fallbackConcepts]))
+  let topic=pickPrimaryConcept(conceptsResolved)||topical||core
+  return{type:'how',parts:[topic,core],concepts:conceptsResolved,raw}
+ }
+
+ let hinted=scoreIntent(lower)
+ if(hinted&&hinted!=='dump')return{type:hinted,parts:[fallbackConcepts.join(' ')],concepts:fallbackConcepts,raw}
+ if(isQuestion||isQuestionLike)return{type:'question',parts:[normalizeConcept(raw.replace(/\?+$/,''))],concepts:fallbackConcepts,raw}
+ return{type:'statement',parts:fallbackConcepts,concepts:fallbackConcepts,raw}
 }
 
 // ════════ MAIN REASONING ════════
 let kg=new KG(),logic=new Logic(kg),analogyEng=new Analogy(kg),mem=new Memory(),reasoningTrace=[]
 
+function confidenceClass(v){return v>0.7?'high':v>0.4?'med':'low'}
+
+function sourceLabel(src){
+ if(src==='conceptnet')return'ConceptNet'
+ if(src==='wikipedia')return'Wikipedia'
+ if(src==='wikidata')return'Wikidata'
+ if(src==='web')return'web'
+ if(src==='inferred')return'inferred'
+ if(src==='seed')return'seed'
+ return src||'user'
+}
+
+function sourceIcon(src){
+ return(src==='conceptnet'||src==='wikipedia'||src==='wikidata'||src==='web')?'🌐':src==='inferred'?'⚡':''
+}
+
+function relationText(rel){return(rel||'related').replace(/_/g,' ')}
+
+function phraseFromEdge(topic,edge){
+ let rel=relationText(edge.rel)
+ let obj=edge.node?.name||'unknown'
+ let src=`${sourceLabel(edge.source)}${sourceIcon(edge.source)?` ${sourceIcon(edge.source)}`:''}`
+ if(edge.dir==='out'){
+  if(edge.rel==='is_a')return`${safeHTML(topic)} is a ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='has')return`${safeHTML(topic)} has ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='causes')return`${safeHTML(topic)} can cause ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='prevents')return`${safeHTML(topic)} can prevent ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='increases')return`${safeHTML(topic)} tends to increase ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='decreases')return`${safeHTML(topic)} tends to decrease ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  if(edge.rel==='part_of')return`${safeHTML(topic)} is part of ${safeHTML(obj)} (${Math.round(edge.confidence*100)}%, ${safeHTML(src)}).`
+  return`${safeHTML(topic)} ${safeHTML(rel)} ${safeHTML(obj)} (<span class="conf ${confidenceClass(edge.confidence)}">${Math.round(edge.confidence*100)}%</span>).`
+ }
+ return`${safeHTML(obj)} ${safeHTML(rel)} ${safeHTML(topic)} (<span class="conf ${confidenceClass(edge.confidence)}">${Math.round(edge.confidence*100)}%</span>).`
+}
+
+function rankEdges(edges){return edges.filter(e=>e.node).sort((a,b)=>edgeRelevance(b)-edgeRelevance(a))}
+
+function formatRawGraphDetails(topic,edges){
+ let rows=edges.map(e=>{
+  let arrow=e.dir==='out'?'->':'<-'
+  let target=safeHTML(e.node?.name||'unknown')
+  return`${safeHTML(topic)} ${arrow} [${safeHTML(e.rel)}] ${target} | conf=${Math.round(e.confidence*100)}% | src=${safeHTML(sourceLabel(e.source))}${e.contested?' | contested':''}`
+ }).join('<br>')
+ return `<details><summary>raw graph edges (${edges.length})</summary><div class="raw">${rows||'none'}</div></details>`
+}
+
+function buildReadableNodeResponse(topic,node,edges,deductions,analogy,hypotheses,wikiSummary){
+ let ranked=rankEdges(edges)
+ let top=ranked.slice(0,MAX_RELATION_ITEMS)
+ let sections=[]
+ if(wikiSummary?.summary){
+  sections.push(`<div class="web">📖 ${safeHTML(wikiSummary.summary.slice(0,360))}${wikiSummary.summary.length>360?'...':''}</div>`)
+ }
+ if(top.length){
+  let grouped={}
+  for(let e of top){
+   let key=e.dir==='out'?e.rel:`${e.rel}_of`
+   if(!grouped[key])grouped[key]=[]
+   grouped[key].push(e)
+  }
+  let groupedText=Object.entries(grouped).map(([rel,list])=>{
+   let relName=safeHTML(rel.replace(/_/g,' '))
+   let samples=list.slice(0,2).map(e=>phraseFromEdge(topic,e)).join(' ')
+   return`<b>${relName}</b>: ${samples}`
+  }).join('<br>')
+  sections.push(groupedText)
+ }
+ let usefulDed=deductions.filter(d=>['is_a','part_of','contains','used_for','causes','increases','decreases','prevents','has','can','requires','made_of','created_by','described_as'].includes(d.rel))
+ if(usefulDed.length){
+  let deduced=usefulDed.slice(0,3).map(d=>`${safeHTML(d.subject)} ${safeHTML(relationText(d.rel))} ${safeHTML(d.object)} (${Math.round(d.confidence*100)}%)`).join('; ')
+  sections.push(`Based on transitive and inheritance reasoning, I infer: ${deduced}.`)
+ }
+ if(analogy)sections.push(`Cross-domain analogy: ${safeHTML(analogy.source)} ↔ ${safeHTML(analogy.target)} (${Math.round(analogy.score*100)}% structural similarity).`)
+ if(hypotheses.length)sections.push(`Hypothesis: ${safeHTML(hypotheses[0].hypothesis)} (${Math.round(hypotheses[0].confidence*100)}%).`)
+ if(ranked.length>MAX_RELATION_ITEMS){
+  sections.push(`<details><summary>show ${ranked.length-MAX_RELATION_ITEMS} more ranked connections</summary><div class="raw">${ranked.slice(MAX_RELATION_ITEMS).map(e=>phraseFromEdge(topic,e)).join('<br>')}</div></details>`)
+ }
+ sections.push(formatRawGraphDetails(topic,ranked))
+ return sections.join('<br><br>')
+}
+
+function nodesFromConcepts(concepts){
+ return uniq(concepts)
+  .map(c=>kg.find(c))
+  .filter(Boolean)
+  .filter(n=>n.name.split(/\s+/).length<=6)
+  .slice(0,8)
+}
+
+const QUESTION_ARTIFACT=/^(?:what|who|why|how|when|where|which|whats|whos|hows|whys)$/i
+
+function pruneQuestionArtifacts(){
+ let badIds=new Set()
+ for(let[id,node]of kg.nodes){
+  if(QUESTION_ARTIFACT.test(node.name))badIds.add(id)
+ }
+ if(!badIds.size)return{nodes:0,edges:0}
+ let removedEdges=0
+ kg.edges=kg.edges.filter(e=>{
+  let remove=badIds.has(e.from)||badIds.has(e.to)
+  if(remove)removedEdges++
+  return!remove
+ })
+ for(let id of badIds){
+  kg.nodes.delete(id)
+  if(typeof nodePos!=='undefined')nodePos.delete(id)
+ }
+ kg.edgeIdx=new Map()
+ for(let[id]of kg.nodes)kg.edgeIdx.set(id,[])
+ for(let edge of kg.edges){
+  kg.edgeIdx.get(edge.from)?.push({edge,dir:'out'})
+  kg.edgeIdx.get(edge.to)?.push({edge,dir:'in'})
+ }
+ if(kg.contradictions.length){
+  kg.contradictions=kg.contradictions.filter(c=>!QUESTION_ARTIFACT.test(c.a)&&!QUESTION_ARTIFACT.test(c.b))
+ }
+ return{nodes:badIds.size,edges:removedEdges}
+}
+
 async function reason(input){
  let intent=parse(input)
  let trace=[]
  let conf=0,response=''
+ lastFocusConcepts=intent.concepts.slice(0,4)
 
  trace.push({label:'intent',content:`${intent.type} — concepts: ${intent.concepts.join(', ')}`})
 
- // Auto-enrich unknown concepts from web
- // First try the full phrase from parts, then individual concepts
- let fullPhrase=intent.parts[0]||intent.concepts.join(' ')
+ // Auto-enrich unknown concepts.
+ let fullPhrase=normalizeConcept(intent.parts[0]||intent.concepts.join(' '))
+ if(intent.type==='question'){
+  fullPhrase=normalizeConcept(intent.parts?.[0]||intent.concepts?.[0]||'')
+  if(fullPhrase.split(/\s+/).length>4)fullPhrase=normalizeConcept(intent.concepts?.[0]||'')
+ }
  let toEnrich=[]
  if(fullPhrase&&fullPhrase.length>2&&!['greet','identity','dump'].includes(intent.type)){
   let fpNode=kg.find(fullPhrase)
-  if(!fpNode||kg.edgesOf(fpNode.id).length<3)toEnrich.push(fullPhrase)
+  if(!fpNode||kg.edgesOf(fpNode.id).length<5)toEnrich.push(fullPhrase)
  }
- let unknowns=intent.concepts.filter(c=>!kg.find(c)||kg.edgesOf(kg.find(c).id).length<3)
+ let unknowns=intent.concepts.filter(c=>!kg.find(c)||kg.edgesOf(kg.find(c).id).length<5)
  toEnrich.push(...unknowns)
- toEnrich=[...new Set(toEnrich)]
+ toEnrich=uniq(toEnrich)
  if(toEnrich.length>0&&!['greet','identity','dump'].includes(intent.type)){
   let fetched=await enrichAll(toEnrich,trace)
   if(fetched>0)trace.push({label:'enriched',content:`${fetched} facts acquired from web`,web:true})
  }
 
- // Also enrich known concepts that haven't been web-enriched yet
- let unenriched=intent.concepts.filter(c=>{let n=kg.find(c);return n&&!n.webEnriched&&kg.edgesOf(n.id).length<8})
- if(unenriched.length>0&&!['greet','identity','dump'].includes(intent.type)){
-  await enrichAll(unenriched.slice(0,3),trace)
- }
+ // Backfill enrichment for partially-known concepts.
+ let unenriched=intent.concepts.filter(c=>{let n=kg.find(c);return n&&!n.webEnriched&&kg.edgesOf(n.id).length<12})
+ if(unenriched.length>0&&!['greet','identity','dump'].includes(intent.type))await enrichAll(unenriched.slice(0,2),trace)
 
  switch(intent.type){
   case 'greet':
-   response=`i'm omniscience x. ${kg.size} concepts, ${kg.edgeCount} edges. i learn from you AND from the web. ask me about anything — i'll pull knowledge from ConceptNet and Wikipedia in real time, reason over it, and show you every step.`
+   response=`i'm omniscience x. ${kg.size} concepts, ${kg.edgeCount} edges. i learn from you and the web (ConceptNet, Wikipedia, Wikidata), reason over the graph, and show each step transparently.`
    conf=1;break
+
   case 'identity':
-   response=`i am a collective intelligence engine with live web learning. ${kg.size} concepts, ${kg.edgeCount} connections, ${webLearnedCount} learned from the web, ${inferenceCount} inferred by logic. ask me about any concept — if i don't know it, i fetch knowledge from ConceptNet (34 million facts) and Wikipedia, add it to my graph, and reason over it. everything transparent. everything traceable. no api key. no cost.`
+   response=`i am a collective intelligence engine with live web learning. ${kg.size} concepts, ${kg.edgeCount} edges, ${webLearnedCount} web-learned, ${inferenceCount} inferred. i fetch from ConceptNet + Wikipedia + Wikidata, integrate evidence, and reason with traceable chains.`
    conf=1;break
+
   case 'dump':{
    let top=[...kg.nodes.values()].sort((a,b)=>b.accessCount-a.accessCount).slice(0,10)
    response=`knowledge: ${kg.size} concepts, ${kg.edgeCount} edges. web-learned: ${webLearnedCount}. inferred: ${inferenceCount}. memories: ${mem.episodes.length}.\n\ntop concepts: ${top.map(n=>`${n.name}${n.webEnriched?' 🌐':''}`).join(', ')}\n\ncontradictions: ${kg.contradictions.length}`
@@ -563,12 +1231,12 @@ async function reason(input){
    let node=kg.find(s)
    let deductions=node?logic.deduct(node):[]
    let hyps=node?logic.abduct(node):[]
-   response=`learned: ${s} ${rel.replace(/_/g,' ')} ${o}.`
+   response=`Learned: ${safeHTML(s)} ${safeHTML(rel.replace(/_/g,' '))} ${safeHTML(o)} (${Math.round((edge?.confidence||0.8)*100)}%).`
    if(edge?.contested)response+=` ⚠ contradicts existing knowledge.`
-   if(deductions.length>0)response+=` deduced: ${deductions.map(d=>`${d.subject} ${d.rel} ${d.object}`).join(', ')}.`
-   if(hyps.length>0)response+=` hypothesis: ${hyps[0].hypothesis}.`
+   if(deductions.length>0)response+=` Inferred: ${deductions.slice(0,3).map(d=>`${safeHTML(d.subject)} ${safeHTML(relationText(d.rel))} ${safeHTML(d.object)} (${Math.round(d.confidence*100)}%)`).join('; ')}.`
+   if(hyps.length>0)response+=` Hypothesis: ${safeHTML(hyps[0].hypothesis)}.`
    let inv={is_a:'has_instance',has:'belongs_to',causes:'caused_by',part_of:'contains',increases:'increased_by',decreases:'decreased_by'}
-   if(inv[rel])kg.link(o,s,inv[rel],0.7,'inferred')
+   if(inv[rel]&&s!==o)kg.link(o,s,inv[rel],0.7,'inferred')
    conf=edge?.contested?0.5:0.9;break
   }
 
@@ -578,69 +1246,109 @@ async function reason(input){
    if(!node){
     let found=intent.concepts.map(c=>kg.find(c)).find(Boolean)
     if(found){node=found;topic=node.name}
-    else{response=`couldn't find information about ${topic} even after searching the web. try a different term or teach me directly.`;conf=0;break}
+    else{response=`couldn't find information about ${safeHTML(topic)} even after searching the web. try a different term or teach me directly.`;conf=0;break}
    }
    node.accessCount++;node.lastAccess=Date.now()
    let edges=kg.edgesOf(node.id)
    trace.push({label:'retrieve',content:`${topic}: ${edges.length} connections`})
    kg.spread(node.id,3)
    let deductions=logic.deduct(node)
-   let anal=analogyEng.find(node)
-   let hyps=logic.abduct(node)
+   let anal=null
+   let hyps=[]
+   edges=kg.edgesOf(node.id)
+   let wikiSummary=webCache.get('wp:'+normalizeConcept(topic))||webCache.get('wp:'+topic.replace(/\s+/g,'_'))
+   if(edges.length===0&&!wikiSummary){
+    response=`searched ConceptNet, Wikipedia, and Wikidata but found limited structured data for "${safeHTML(topic)}". teach me directly or try a related term.`;conf=0.12;break
+   }
+   response=buildReadableNodeResponse(topic,node,edges,deductions,anal,hyps,wikiSummary)
+   conf=Math.max(...edges.map(e=>e.confidence),wikiSummary?0.72:0.15);break
+  }
 
-   // Check if we have a Wikipedia summary cached
-   let wikiSummary=webCache.get('wp:'+topic)||webCache.get('wp:'+topic.replace(/\s+/g,'_'))
-   
-   let grouped={};edges.forEach(e=>{
-    let key=e.dir==='out'?e.rel:`${e.rel}_of`
-    if(!grouped[key])grouped[key]=[]
-    if(e.node)grouped[key].push({name:e.node.name,conf:e.confidence,sources:e.sources,contested:e.contested,source:e.source})
-   })
+  case 'question':{
+   let nodes=nodesFromConcepts(intent.concepts)
+   if(nodes.length===0){response=`i still don't have enough grounded knowledge to answer that directly. ask me to explain the main concept first, or teach a causal link.`;conf=0.15;break}
 
-   if(Object.keys(grouped).length===0&&!wikiSummary){
-    response=`searched ConceptNet and Wikipedia but found limited structured data for "${topic}". teach me directly or try a related term.`;conf=0.1;break
+   let primary=intent.parts?.[0]?kg.find(intent.parts[0]):null
+   if(!primary){
+    primary=nodes.sort((a,b)=>kg.edgesOf(b.id).length-kg.edgesOf(a.id).length)[0]
+   }
+   if(!primary){response=`i couldn't isolate the core concept in that question yet.`;conf=0.12;break}
+
+   primary.accessCount++;primary.lastAccess=Date.now()
+   let edges=kg.edgesOf(primary.id)
+   let isRiskQuery=/\b(dangerous|safe|harmful|risk|risky|hazard|hazardous|toxic|toxicity|unsafe)\b/i.test(intent.raw)
+
+   if(isRiskQuery){
+    const hazardWords=['danger','dangerous','harm','harmful','risk','injury','disease','toxicity','cancer','death','accident','fire','unsafe','pollution']
+    let riskE=[],safetyE=[]
+    for(let e of edges.filter(e=>e.dir==='out'&&e.node)){
+      let target=e.node.name
+      let hazardHit=hazardWords.some(h=>target.includes(h))
+      let healthHit=target.includes('health')||target.includes('safety')
+      if(!hazardHit&&!healthHit)continue
+      if(['causes','increases','enables'].includes(e.rel))riskE.push(e)
+      if(['prevents','decreases'].includes(e.rel))safetyE.push(e)
+      if(e.rel==='decreases'&&target.includes('health'))riskE.push(e)
+      if(e.rel==='increases'&&target.includes('health'))safetyE.push(e)
+    }
+    let riskScore=riskE.reduce((s,e)=>s+e.confidence,0)
+    let safetyScore=safetyE.reduce((s,e)=>s+e.confidence,0)
+    let verdict=''
+    if(riskScore+safetyScore<0.25)verdict=`i don't yet have strong direct risk evidence in the graph to conclude whether ${safeHTML(primary.name)} is dangerous.`
+    else if(riskScore>safetyScore*1.2)verdict=`current graph evidence suggests ${safeHTML(primary.name)} can involve risks.`
+    else if(safetyScore>riskScore*1.2)verdict=`current graph evidence does not indicate strong inherent danger for ${safeHTML(primary.name)}, though context still matters.`
+    else verdict=`current evidence is mixed on whether ${safeHTML(primary.name)} is dangerous.`
+
+    let evidence=[...riskE,...safetyE].sort((a,b)=>edgeRelevance(b)-edgeRelevance(a)).slice(0,5)
+    if(evidence.length)verdict+=`<br><br>${evidence.map(e=>phraseFromEdge(primary.name,e)).join(' ')}`
+    response=`${verdict}<br><br>${formatRawGraphDetails(primary.name,rankEdges(edges).slice(0,12))}`
+    conf=clamp((riskScore+safetyScore)/2,0.26,0.8)
+    break
    }
 
-   // Start with Wikipedia summary if we have one
-   let responseParts=[]
-   if(wikiSummary&&wikiSummary.summary){
-    responseParts.push(`<div class="web">📖 ${wikiSummary.summary.slice(0,300)}${wikiSummary.summary.length>300?'...':''}</div>`)
-   }
-
-   let parts=Object.entries(grouped).map(([rel,targets])=>{
-    let items=targets.slice(0,6).map(t=>{
-     let confCls=t.conf>0.7?'high':t.conf>0.4?'med':'low'
-     let srcTag=t.source==='web'?' 🌐':t.source==='inferred'?' ⚡':''
-     return`${t.name}<span class="conf ${confCls}">${Math.round(t.conf*100)}%${srcTag}${t.contested?' ⚠':''}</span>`
-    })
-    return`<b>${rel.replace(/_/g,' ')}</b>: ${items.join(', ')}`
-   })
-   if(parts.length>0)responseParts.push(parts.join('. ')+'.')
-   if(deductions.length>0)responseParts.push(`⚡ deduced: ${deductions.slice(0,3).map(d=>`${d.subject} ${d.rel} ${d.object} (${Math.round(d.confidence*100)}%)`).join('. ')}.`)
-   if(anal)responseParts.push(`analogy: ${anal.source} ↔ ${anal.target} (${Math.round(anal.score*100)}% structural match).`)
-   if(hyps.length>0)responseParts.push(`hypothesis: ${hyps[0].hypothesis}.`)
-   
-   response=responseParts.join('<br><br>')
-   conf=Math.max(...edges.map(e=>e.confidence),wikiSummary?0.7:0);break
+   let wikiSummary=webCache.get('wp:'+normalizeConcept(primary.name))
+   let deductions=logic.deduct(primary)
+   edges=kg.edgesOf(primary.id)
+   let anal=null
+   let hyps=[]
+   response=buildReadableNodeResponse(primary.name,primary,edges,deductions,anal,hyps,wikiSummary)
+   conf=Math.max(...edges.map(e=>e.confidence),wikiSummary?0.7:0.24)
+   break
   }
 
   case 'why':case 'how':{
-   let nodes=intent.concepts.map(c=>kg.find(c)).filter(Boolean)
+   let nodes=nodesFromConcepts(intent.concepts)
    if(nodes.length===0){response=`i don't have enough knowledge even after web search. teach me the components.`;conf=0;break}
-   trace.push({label:'search',content:`causal chains through: ${nodes.map(n=>n.name).join(', ')}`})
+   let primary=kg.find(intent.parts?.[0])||nodes[0]
+   if(primary)nodes=[primary,...nodes.filter(n=>n.id!==primary.id)]
+   let asksOrigin=intent.type==='how'&&/\b(made|make|built|build|created|create|developed|develop|founded|started|invented|origin)\b/i.test(intent.raw)
+   if(asksOrigin&&primary){
+    let originEdges=rankEdges(kg.edgesOf(primary.id)).filter(e=>e.dir==='out'&&['created_by','made_of','derived_from','part_of','used_for','is_a','described_as','starts_with'].includes(e.rel))
+    let wikiSummary=webCache.get('wp:'+normalizeConcept(primary.name))
+    if(originEdges.length||wikiSummary){
+     response=`${safeHTML(primary.name)} was developed through a process rather than a single-step event.`
+     if(wikiSummary?.summary)response+=`<br><br><div class="web">📖 ${safeHTML(wikiSummary.summary.slice(0,280))}${wikiSummary.summary.length>280?'...':''}</div>`
+     if(originEdges.length)response+=`<br><br>${originEdges.slice(0,4).map(e=>phraseFromEdge(primary.name,e)).join(' ')}`
+     response+=`<br><br>${formatRawGraphDetails(primary.name,originEdges.slice(0,12))}`
+     conf=Math.max(...originEdges.map(e=>e.confidence),wikiSummary?0.66:0.32)
+     break
+    }
+   }
+
+   let relFilter=intent.type==='why'
+    ?new Set(['causes','leads_to','increases','decreases','prevents','enables','requires'])
+    :new Set(['causes','leads_to','increases','decreases','prevents','enables','requires','part_of','contains','used_for','made_of','is_a','has_property'])
+   trace.push({label:'search',content:`${intent.type} chains through: ${nodes.map(n=>n.name).join(', ')}`})
    let allPaths=[]
-   for(let node of nodes)allPaths.push(...kg.multiHop(node.id,null,5))
-   if(nodes.length>=2)allPaths.push(...kg.multiHop(nodes[0].id,nodes[nodes.length-1].id,6))
+   for(let node of nodes)allPaths.push(...kg.multiHop(node.id,null,5,relFilter))
+   if(nodes.length>=2)allPaths.push(...kg.multiHop(nodes[0].id,nodes[nodes.length-1].id,6,relFilter))
    allPaths.sort((a,b)=>b.confidence-a.confidence)
    if(allPaths.length>0){
     let best=allPaths[0]
-    let chain=best.path.map(s=>{
-     let cc=s.confidence>0.7?'high':s.confidence>0.4?'med':'low'
-     let src=s.source==='web'?' 🌐':s.source==='inferred'?' ⚡':''
-     return`${s.from.name} —[${s.rel}]→ ${s.to.name}<span class="conf ${cc}">${Math.round(s.confidence*100)}%${src}</span>`
-    })
-    response=`reasoning chain: ${chain.join(' → ')}<br><br>overall: <span class="conf ${best.confidence>0.5?'high':'med'}">${Math.round(best.confidence*100)}%</span>`
-    if(allPaths.length>1)response+=`<br><br>alt path (${Math.round(allPaths[1].confidence*100)}%): ${allPaths[1].path.map(s=>`${s.from.name} →${s.rel}→ ${s.to.name}`).join(' → ')}`
+    let chainText=best.path.map(s=>`${safeHTML(s.from.name)} ${safeHTML(relationText(s.rel))} ${safeHTML(s.to.name)} (${Math.round(s.confidence*100)}%, ${safeHTML(sourceLabel(s.source))})`).join(' -> ')
+    response=`One likely reasoning chain is: ${chainText}.<br><br>Overall confidence: <span class="conf ${confidenceClass(best.confidence)}">${Math.round(best.confidence*100)}%</span>.`
+    if(allPaths.length>1)response+=`<br><br>Alternative chain (${Math.round(allPaths[1].confidence*100)}%): ${safeHTML(allPaths[1].path.map(s=>`${s.from.name} ->${s.rel}-> ${s.to.name}`).join(' -> '))}`
+    response+=`<br><br><details><summary>show raw paths (${allPaths.slice(0,5).length})</summary><div class="raw">${allPaths.slice(0,5).map((p,i)=>`#${i+1} ${Math.round(p.confidence*100)}% | ${safeHTML(p.path.map(s=>`${s.from.name} -[${s.rel}]-> ${s.to.name}`).join(' => '))}`).join('<br>')}</div></details>`
     conf=best.confidence
    }else{response=`found concepts but can't chain them yet. teach me causal links.`;conf=0.1}
    break
@@ -651,63 +1359,62 @@ async function reason(input){
    if(!node){response=`need to know that concept first.`;conf=0;break}
    let effects=kg.counterfactual(node.id)
    if(effects.length>0){
-    response=`if ${node.name} were removed:<br><br>`+effects.map(e=>{
-     let cc=e.confidence>0.5?'high':'med'
-     return`${e.effect}<span class="conf ${cc}">${Math.round(e.confidence*100)}%</span>`
-    }).join('<br>')
+    response=`If ${safeHTML(node.name)} were removed, likely effects would be:<br><br>`+effects.map(e=>`${safeHTML(e.effect)}<span class="conf ${confidenceClass(e.confidence)}">${Math.round(e.confidence*100)}%</span>`).join('<br>')
     conf=Math.max(...effects.map(e=>e.confidence))
    }else{response=`not enough causal chains from ${node.name} to predict.`;conf=0.1}
    break
   }
 
   case 'compare':{
-   let[a,b]=intent.parts;let na=kg.find(a),nb=kg.find(b)
+   let[a,b]=intent.parts
+   let na=kg.find(a),nb=kg.find(b)
    if(!na||!nb){response=`need to know both. teach me about ${!na?a:b}.`;conf=0;break}
-   let sim=kg.similarity(na,nb),paths=kg.multiHop(na.id,nb.id,5)
-   let eA=kg.edgesOf(na.id),eB=kg.edgesOf(nb.id)
-   response=`<b>${a} vs ${b}</b> — similarity: ${Math.round(sim*100)}%<br>`
+   let sim=kg.similarity(na,nb),paths=kg.multiHop(na.id,nb.id,5),eA=kg.edgesOf(na.id),eB=kg.edgesOf(nb.id)
+   response=`<b>${safeHTML(a)} vs ${safeHTML(b)}</b> — similarity: ${Math.round(sim*100)}%<br>`
    let rA=new Set(eA.map(e=>e.rel+'→'+(e.node?.name||''))),rB=new Set(eB.map(e=>e.rel+'→'+(e.node?.name||'')))
    let shared=[...rA].filter(r=>rB.has(r)),oA=[...rA].filter(r=>!rB.has(r)),oB=[...rB].filter(r=>!rA.has(r))
-   if(shared.length)response+=`shared: ${shared.slice(0,4).join('; ')}<br>`
-   if(oA.length)response+=`${a} unique: ${oA.slice(0,4).join('; ')}<br>`
-   if(oB.length)response+=`${b} unique: ${oB.slice(0,4).join('; ')}<br>`
-   if(paths.length)response+=`path: ${paths[0].path.map(s=>`${s.from.name}→${s.to.name}`).join('→')}`
+   if(shared.length)response+=`shared: ${safeHTML(shared.slice(0,4).join('; '))}<br>`
+   if(oA.length)response+=`${safeHTML(a)} unique: ${safeHTML(oA.slice(0,4).join('; '))}<br>`
+   if(oB.length)response+=`${safeHTML(b)} unique: ${safeHTML(oB.slice(0,4).join('; '))}<br>`
+   if(paths.length)response+=`path: ${safeHTML(paths[0].path.map(s=>`${s.from.name}→${s.to.name}`).join('→'))}`
+   response+=`<br>${formatRawGraphDetails(`${a} / ${b}`,[...eA.slice(0,10),...eB.slice(0,10)])}`
    conf=0.7;break
   }
 
   case 'connect':{
-   let nodes=intent.concepts.map(c=>kg.find(c)).filter(Boolean)
+   let nodes=nodesFromConcepts(intent.concepts)
    if(nodes.length<2){response=`need two known concepts.`;conf=0;break}
    let paths=kg.multiHop(nodes[0].id,nodes[nodes.length-1].id,6)
    if(paths.length>0){
-    response=`connection (${Math.round(paths[0].confidence*100)}%): ${paths[0].path.map(s=>`${s.from.name} —[${s.rel}]→ ${s.to.name}`).join(' → ')}`
+    response=`Connection found (${Math.round(paths[0].confidence*100)}%): ${safeHTML(paths[0].path.map(s=>`${s.from.name} ->[${s.rel}]-> ${s.to.name}`).join(' -> '))}`
     conf=paths[0].confidence
    }else{response=`no path found. teach me a link between them.`;conf=0}
    break
   }
 
   case 'reflect':{
-   let topic=intent.parts[0]||intent.concepts[0];let node=kg.find(topic)
-   if(!node){response=`haven't encountered ${topic}.`;conf=0;break}
-   node.accessCount++;let edges=kg.edgesOf(node.id),similar=kg.findSimilar(node.id,5)
-   let anal=analogyEng.find(node),hyps=logic.abduct(node),cf=kg.counterfactual(node.id)
-   response=`<b>${topic}</b>: ${edges.length} connections. nearest: ${similar.slice(0,3).map(s=>`${s.node.name} (${Math.round(s.sim*100)}%)`).join(', ')}.`
-   if(anal)response+=`<br>analogy: ${topic} ↔ ${anal.target}.`
-   if(hyps.length)response+=`<br>hypothesis: ${hyps[0].hypothesis}.`
-   if(cf.length)response+=`<br>counterfactual: if removed → ${cf[0].effect}.`
+   let topic=intent.parts[0]||intent.concepts[0]
+   let node=kg.find(topic)
+   if(!node){response=`haven't encountered ${safeHTML(topic)}.`;conf=0;break}
+   node.accessCount++
+   let edges=kg.edgesOf(node.id),similar=kg.findSimilar(node.id,5),anal=edges.length>=6?analogyEng.find(node):null,hyps=edges.length>=5?logic.abduct(node):[],cf=kg.counterfactual(node.id)
+   response=`<b>${safeHTML(topic)}</b>: ${edges.length} connections. nearest: ${similar.slice(0,3).map(s=>`${safeHTML(s.node.name)} (${Math.round(s.sim*100)}%)`).join(', ')}.`
+   if(anal)response+=`<br>analogy: ${safeHTML(topic)} ↔ ${safeHTML(anal.target)}.`
+   if(hyps.length)response+=`<br>hypothesis: ${safeHTML(hyps[0].hypothesis)}.`
+   if(cf.length)response+=`<br>counterfactual: if removed -> ${safeHTML(cf[0].effect)}.`
    conf=0.6;break
   }
 
-  case 'question':case 'statement':default:{
+  case 'statement':default:{
    let concepts=intent.concepts
    if(concepts.length<2){response=`tell me more. i learn from everything.`;conf=0.3;break}
-   for(let i=0;i<concepts.length-1;i++)kg.link(concepts[i],concepts[i+1],'related',0.4,'context')
+   for(let i=0;i<concepts.length-1;i++)kg.link(concepts[i],concepts[i+1],'related',0.42,'context')
    let best=null,bestE=0
    concepts.forEach(c=>{let n=kg.find(c);if(n){let e=kg.edgesOf(n.id).length;if(e>bestE){bestE=e;best=n}}})
    if(best&&bestE>3){
-    let edges=kg.edgesOf(best.id).slice(0,5)
-    response=`absorbed. ${best.name} is densest — connects to ${edges.map(e=>e.node?.name).filter(Boolean).join(', ')}.`
-    let anal=analogyEng.find(best);if(anal)response+=` analogy: ${best.name} ↔ ${anal.target}.`
+    let edges=rankEdges(kg.edgesOf(best.id)).slice(0,5)
+    response=`Absorbed. ${safeHTML(best.name)} is currently the densest concept in this input, connecting to ${safeHTML(edges.map(e=>e.node?.name).filter(Boolean).join(', '))}.`
+    let anal=analogyEng.find(best);if(anal)response+=` analogy: ${safeHTML(best.name)} ↔ ${safeHTML(anal.target)}.`
    }else response=`registered ${concepts.length} concepts. keep teaching.`
    conf=0.4
   }
@@ -721,42 +1428,157 @@ async function reason(input){
 
 // ════════ GRAPH VIZ ════════
 const gc=document.getElementById('graphCanvas'),gctx=gc.getContext('2d')
-let gW,gH,gCam={x:0,y:0,z:0.7},gDrag=false,gStart={x:0,y:0},nodePos=new Map()
+let gW,gH,gCam={x:0,y:0,z:0.7},gDrag=false,gStart={x:0,y:0},nodePos=new Map(),visibleNodeIds=new Set()
+
+function ensurePos(id){
+ if(!nodePos.has(id))nodePos.set(id,{x:(Math.random()-0.5)*420,y:(Math.random()-0.5)*420,vx:0,vy:0,id})
+ return nodePos.get(id)
+}
+
+function getVisibleNodeIds(maxNodes=520){
+ if(kg.size<=maxNodes)return new Set([...kg.nodes.keys()])
+ let selected=new Set()
+ for(let concept of lastFocusConcepts){
+  let n=kg.find(concept)
+  if(!n)continue
+  selected.add(n.id)
+  let local=kg.getNeighborhood(n.id,2,Math.floor(maxNodes*0.65))
+  for(let id of local)selected.add(id)
+  if(selected.size>=maxNodes)break
+ }
+ if(selected.size<maxNodes){
+  let ranked=[...kg.nodes.values()].sort((a,b)=>{
+   let sa=(kg.edgesOf(a.id).length*0.7)+(a.accessCount*1.1)+(a.activation*8)
+   let sb=(kg.edgesOf(b.id).length*0.7)+(b.accessCount*1.1)+(b.activation*8)
+   return sb-sa
+  })
+  for(let n of ranked){selected.add(n.id);if(selected.size>=maxNodes)break}
+ }
+ return selected
+}
+
+function quadNode(x,y,size){return{x,y,size,mass:0,cx:0,cy:0,point:null,children:null}}
+
+function childIndex(node,p){
+ let midX=node.x+node.size/2,midY=node.y+node.size/2
+ return(p.x>=midX?1:0)+(p.y>=midY?2:0)
+}
+
+function subdivide(node){
+ let h=node.size/2
+ node.children=[
+  quadNode(node.x,node.y,h),
+  quadNode(node.x+h,node.y,h),
+  quadNode(node.x,node.y+h,h),
+  quadNode(node.x+h,node.y+h,h)
+ ]
+}
+
+function updateMass(node,p){
+ let total=node.mass+1
+ node.cx=(node.cx*node.mass+p.x)/total
+ node.cy=(node.cy*node.mass+p.y)/total
+ node.mass=total
+}
+
+function insertQuad(node,p,depth=0){
+ if(depth>18)return
+ updateMass(node,p)
+ if(!node.children&&!node.point){node.point=p;return}
+ if(!node.children){
+  let old=node.point
+  node.point=null
+  subdivide(node)
+  insertQuad(node.children[childIndex(node,old)],old,depth+1)
+ }
+ insertQuad(node.children[childIndex(node,p)],p,depth+1)
+}
+
+function buildQuad(points){
+ if(!points.length)return null
+ let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity
+ for(let p of points){if(p.x<minX)minX=p.x;if(p.y<minY)minY=p.y;if(p.x>maxX)maxX=p.x;if(p.y>maxY)maxY=p.y}
+ let size=Math.max(maxX-minX,maxY-minY,1)+20
+ let root=quadNode(minX-10,minY-10,size)
+ for(let p of points)insertQuad(root,p)
+ return root
+}
+
+function applyBarnesHut(p,node,theta=0.7){
+ if(!node||node.mass===0)return
+ let dx=node.cx-p.x,dy=node.cy-p.y
+ let dist=Math.sqrt(dx*dx+dy*dy)+0.6
+ if(!node.children){
+  if(node.point&&node.point.id===p.id&&node.mass<=1)return
+  let f=(145*node.mass)/(dist*dist)
+  p.vx-=dx/dist*f
+  p.vy-=dy/dist*f
+  return
+ }
+ if((node.size/dist)<theta){
+  let f=(145*node.mass)/(dist*dist)
+  p.vx-=dx/dist*f
+  p.vy-=dy/dist*f
+  return
+ }
+ for(let child of node.children)applyBarnesHut(p,child,theta)
+}
 
 function stepLayout(){
- let pos=[...nodePos.entries()]
- for(let i=0;i<pos.length;i++){
-  for(let j=i+1;j<pos.length;j++){
-   let a=pos[i][1],b=pos[j][1],dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+1,f=150/d
-   a.vx-=dx/d*f;a.vy-=dy/d*f;b.vx+=dx/d*f;b.vy+=dy/d*f
-  }
- }
+ visibleNodeIds=getVisibleNodeIds()
+ let points=[]
+ for(let id of visibleNodeIds)points.push(ensurePos(id))
+ let quad=buildQuad(points)
+ for(let p of points)applyBarnesHut(p,quad,0.68)
+
  for(let e of kg.edges){
-  let a=nodePos.get(e.from),b=nodePos.get(e.to);if(!a||!b)continue
-  let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+1,f=(d-70)*0.008*e.strength
+  if(!visibleNodeIds.has(e.from)||!visibleNodeIds.has(e.to))continue
+  let a=ensurePos(e.from),b=ensurePos(e.to)
+  let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)+1
+  let targetLen=68+Math.min(e.strength*7,20)
+  let f=(d-targetLen)*0.009*e.strength
   a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f
  }
- for(let[_,p]of nodePos){p.x+=p.vx*0.3;p.y+=p.vy*0.3;p.vx*=0.85;p.vy*=0.85}
+ for(let p of points){
+  p.vx+=(-p.x)*0.00045
+  p.vy+=(-p.y)*0.00045
+  p.x+=p.vx*0.34
+  p.y+=p.vy*0.34
+  p.vx*=0.84
+  p.vy*=0.84
+ }
 }
 
 function renderGraph(){
- if(!gc.offsetWidth)return;gW=gc.width=gc.offsetWidth;gH=gc.height=gc.offsetHeight
+ if(!gc.offsetWidth)return
+ gW=gc.width=gc.offsetWidth;gH=gc.height=gc.offsetHeight
  gctx.fillStyle='#070910';gctx.fillRect(0,0,gW,gH)
- gctx.save();gctx.translate(gW/2+gCam.x,gH/2+gCam.y);gctx.scale(gCam.z,gCam.z)
+ gctx.save()
+ gctx.translate(gW/2+gCam.x,gH/2+gCam.y)
+ gctx.scale(gCam.z,gCam.z)
+
  for(let e of kg.edges){
+  if(!visibleNodeIds.has(e.from)||!visibleNodeIds.has(e.to))continue
   let a=nodePos.get(e.from),b=nodePos.get(e.to);if(!a||!b)continue
-  let alpha=0.03+e.strength*0.025
-  gctx.strokeStyle=e.source==='web'?`rgba(167,139,250,${alpha})`:e.contested?`rgba(255,200,80,${alpha})`:`rgba(107,150,255,${alpha})`
-  gctx.lineWidth=0.5+e.strength*0.2;gctx.beginPath();gctx.moveTo(a.x,a.y);gctx.lineTo(b.x,b.y);gctx.stroke()
+  let alpha=0.18+e.strength*0.13
+  gctx.strokeStyle=(e.source==='web'||e.source==='conceptnet'||e.source==='wikipedia'||e.source==='wikidata')
+   ?`rgba(186,158,255,${alpha})`
+   :e.contested?`rgba(255,210,96,${alpha})`:`rgba(120,164,255,${alpha})`
+  gctx.lineWidth=0.8+e.strength*0.45
+  gctx.beginPath();gctx.moveTo(a.x,a.y);gctx.lineTo(b.x,b.y);gctx.stroke()
  }
- for(let[id,pos]of nodePos){
-  let node=kg.nodes.get(id);if(!node)continue
-  let size=2.5+Math.min(kg.edgesOf(id).length*0.4,7)+node.activation*3
-  let alpha=0.15+node.activation*0.4+Math.min(node.accessCount*0.02,0.3)
-  gctx.fillStyle=node.webEnriched?`rgba(167,139,250,${alpha})`:node.contested?`rgba(255,200,80,${alpha})`:`rgba(107,150,255,${alpha})`
+
+ let showLabels=gCam.z>0.75||visibleNodeIds.size<150
+ for(let id of visibleNodeIds){
+  let pos=nodePos.get(id),node=kg.nodes.get(id);if(!node||!pos)continue
+  let degree=kg.edgesOf(id).length
+  let size=3.8+Math.min(degree*0.45,7.5)+node.activation*2.5
+  let alpha=0.55+node.activation*0.25+Math.min(node.accessCount*0.03,0.22)
+  gctx.fillStyle=node.webEnriched?`rgba(186,158,255,${alpha})`:node.contested?`rgba(255,210,96,${alpha})`:`rgba(120,164,255,${alpha})`
   gctx.beginPath();gctx.arc(pos.x,pos.y,size,0,Math.PI*2);gctx.fill()
-  if(size>3.5||node.activation>0.3){
-   gctx.fillStyle=`rgba(200,215,240,${alpha*0.5})`;gctx.font=`${Math.max(7,size)}px system-ui`
+  if(showLabels&&(gCam.z>1.05||degree>7||node.activation>0.15)){
+   gctx.fillStyle=`rgba(218,228,245,${Math.min(alpha*1.15,0.92)})`
+   gctx.font=`${Math.max(8,size+1.8)}px system-ui`
    gctx.fillText(node.name,pos.x+size+2,pos.y+2)
   }
  }
@@ -769,9 +1591,10 @@ gc.addEventListener('wheel',e=>{e.preventDefault();gCam.z*=e.deltaY>0?0.9:1.1;gC
 
 // ════════ UI ════════
 let chatEl=document.getElementById('chat')
-function addMsg(cls,html,chain=''){
+function addMsg(cls,html,chain='',allowHtml=true){
  let d=document.createElement('div');d.className='msg '+cls
- d.innerHTML=(chain?`<div class="chain">${chain}</div>`:'')+html
+ let body=allowHtml?html:safeHTML(html)
+ d.innerHTML=(chain?`<div class="chain">${safeHTML(chain)}</div>`:'')+body
  chatEl.appendChild(d);if(chatEl.children.length>150)chatEl.removeChild(chatEl.firstChild)
  chatEl.scrollTop=chatEl.scrollHeight
 }
@@ -780,7 +1603,8 @@ function switchView(name){
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'))
  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
  document.getElementById('v-'+name).classList.add('active')
- event.target.classList.add('active')
+ let tab=[...document.querySelectorAll('.tab')].find(t=>t.getAttribute('onclick')===`switchView('${name}')`)
+ if(tab)tab.classList.add('active')
 }
 
 function updateUI(conf){
@@ -790,7 +1614,7 @@ function updateUI(conf){
  document.getElementById('mI').textContent=inferenceCount
  document.getElementById('mConf').textContent=conf!=null?Math.round(conf*100)+'%':'—'
  // Reasoning view
- document.getElementById('reasoningView').innerHTML=reasoningTrace.map(s=>`<div class="r-step${s.web?' web':''}"><div class="label">${s.label}</div><div class="content">${s.content}</div></div>`).join('')
+ document.getElementById('reasoningView').innerHTML=reasoningTrace.map(s=>`<div class="r-step${s.web?' web':''}"><div class="label">${safeHTML(s.label)}</div><div class="content">${safeHTML(s.content)}</div></div>`).join('')
  // Right panel
  let top=[...kg.nodes.values()].sort((a,b)=>b.accessCount-a.accessCount).slice(0,12)
  document.getElementById('rightPanel').innerHTML=`
@@ -803,15 +1627,15 @@ function updateUI(conf){
   <div class="row"><span>memories</span><b style="color:var(--blue)">${mem.episodes.length}</b></div>
   <div class="row"><span>analogies</span><b style="color:var(--blue)">${analogyEng.found.length}</b></div>
   <h4>top concepts</h4>
-  ${top.map(n=>`<span class="tag ${n.webEnriched?'web':'user'}">${n.name}${n.webEnriched?' 🌐':''}</span>`).join(' ')}
+  ${top.map(n=>`<span class="tag ${n.webEnriched?'web':'user'}">${safeHTML(n.name)}${n.webEnriched?' 🌐':''}</span>`).join(' ')}
   <h4>recent contradictions</h4>
-  ${kg.contradictions.slice(-3).map(c=>`<div class="edge-item" style="color:var(--gold)">${c.a} ${c.rel1}/${c.rel2} ${c.b}</div>`).join('')||'<div class="edge-item">none</div>'}
+  ${kg.contradictions.slice(-3).map(c=>`<div class="edge-item" style="color:var(--gold)">${safeHTML(c.a)} ${safeHTML(c.rel1)}/${safeHTML(c.rel2)} ${safeHTML(c.b)}</div>`).join('')||'<div class="edge-item">none</div>'}
   <h4>recent inferences</h4>
-  ${logic.inferences.slice(-5).map(i=>`<div class="edge-item">${i.subject} ${i.rel} ${i.object} (${Math.round(i.confidence*100)}%)</div>`).join('')||'<div class="edge-item">none</div>'}
+  ${logic.inferences.slice(-5).map(i=>`<div class="edge-item">${safeHTML(i.subject)} ${safeHTML(i.rel)} ${safeHTML(i.object)} (${Math.round(i.confidence*100)}%)</div>`).join('')||'<div class="edge-item">none</div>'}
   <h4>hypotheses</h4>
-  ${logic.hypotheses.slice(-3).map(h=>`<div class="edge-item">${h.hypothesis}</div>`).join('')||'<div class="edge-item">none</div>'}
+  ${logic.hypotheses.slice(-3).map(h=>`<div class="edge-item">${safeHTML(h.hypothesis)}</div>`).join('')||'<div class="edge-item">none</div>'}
   <h4>memory patterns</h4>
-  ${mem.patterns.slice(-3).map(p=>`<div class="edge-item">${p.concepts.join(', ')}</div>`).join('')||'<div class="edge-item">consolidating...</div>'}
+  ${mem.patterns.slice(-3).map(p=>`<div class="edge-item">${safeHTML(p.concepts.join(', '))}</div>`).join('')||'<div class="edge-item">consolidating...</div>'}
  `
  // Sync graph positions
  for(let[id]of kg.nodes){if(!nodePos.has(id))nodePos.set(id,{x:(Math.random()-0.5)*400,y:(Math.random()-0.5)*400,vx:0,vy:0})}
@@ -819,14 +1643,14 @@ function updateUI(conf){
 
 async function go(){
  let inp=document.getElementById('in'),text=inp.value.trim();if(!text)return
- inp.value='';addMsg('u',text)
+ inp.value='';addMsg('u',text,'',false)
  // Show thinking indicator
  let thinkingDiv=document.createElement('div');thinkingDiv.className='msg ai'
  thinkingDiv.innerHTML='<span class="fetching"><span class="loading"></span> thinking & searching the web...</span>'
  chatEl.appendChild(thinkingDiv);chatEl.scrollTop=chatEl.scrollHeight
  let r=await reason(text)
  chatEl.removeChild(thinkingDiv)
- let chainStr=r.chain.map(s=>`${s.label}: ${s.content}`).join(' → ')
+ let chainStr=r.chain.map(s=>`${s.label}: ${s.content}`).join(' -> ')
  addMsg('ai',r.text,chainStr)
  updateUI(r.confidence)
  save()
@@ -850,27 +1674,41 @@ function seed(){
 }
 
 // ════════ PERSISTENCE ════════
+const storageAPI=(window.storage&&typeof window.storage.get==='function'&&typeof window.storage.set==='function')
+ ?window.storage
+ :{
+  async get(key){
+   try{
+    let value=localStorage.getItem(key)
+    return value==null?null:{value}
+   }catch(e){return null}
+  },
+  async set(key,value){
+   try{localStorage.setItem(key,value)}catch(e){}
+  }
+ }
+
 async function save(){
  try{
   let data={
    nodes:[...kg.nodes.values()].map(n=>({id:n.id,name:n.name,type:n.type,embedding:[...n.embedding],sources:n.sources,accessCount:n.accessCount,contested:n.contested,webEnriched:n.webEnriched})),
-   edges:kg.edges.map(e=>({from:e.from,to:e.to,rel:e.rel,confidence:e.confidence,sources:e.sources,strength:e.strength,contested:e.contested,source:e.source})),
+   edges:kg.edges.map(e=>({from:e.from,to:e.to,rel:e.rel,confidence:e.confidence,sources:e.sources,strength:e.strength,contested:e.contested,source:e.source,createdAt:e.createdAt,lastUpdated:e.lastUpdated})),
    contradictions:kg.contradictions.slice(-50),
    inferences:logic.inferences.slice(-80),hypotheses:logic.hypotheses.slice(-40),
    analogies:analogyEng.found.slice(-20),episodes:mem.episodes.slice(-80),
    patterns:mem.patterns.slice(-15),nid,webLearnedCount,inferenceCount
   }
-  await window.storage.set('omniscience-x',JSON.stringify(data))
+  await storageAPI.set('omniscience-x',JSON.stringify(data))
  }catch(e){}
 }
 
 async function load(){
  try{
-  let r=await window.storage.get('omniscience-x')
+  let r=await storageAPI.get('omniscience-x')
   if(r&&r.value){
    let data=JSON.parse(r.value);nid=data.nid||0;webLearnedCount=data.webLearnedCount||0;inferenceCount=data.inferenceCount||0
    data.nodes.forEach(n=>{let node=new Node(n.name,n.type);node.id=n.id;node.embedding=new Float32Array(n.embedding);node.sources=n.sources;node.accessCount=n.accessCount;node.contested=n.contested;node.webEnriched=n.webEnriched;kg.nodes.set(node.id,node);kg.edgeIdx.set(node.id,[])})
-   data.edges.forEach(e=>{let edge=new Edge(e.from,e.to,e.rel,e.confidence);edge.sources=e.sources;edge.strength=e.strength;edge.contested=e.contested;edge.source=e.source;kg.edges.push(edge);kg.edgeIdx.get(e.from)?.push({edge,dir:'out'});kg.edgeIdx.get(e.to)?.push({edge,dir:'in'})})
+   data.edges.forEach(e=>{let edge=new Edge(e.from,e.to,e.rel,e.confidence);edge.sources=e.sources;edge.strength=e.strength;edge.contested=e.contested;edge.source=e.source;edge.createdAt=e.createdAt||Date.now();edge.lastUpdated=e.lastUpdated||edge.createdAt;kg.edges.push(edge);kg.edgeIdx.get(e.from)?.push({edge,dir:'out'});kg.edgeIdx.get(e.to)?.push({edge,dir:'in'})})
    kg.contradictions=data.contradictions||[];logic.inferences=data.inferences||[];logic.hypotheses=data.hypotheses||[]
    analogyEng.found=data.analogies||[];mem.episodes=data.episodes||[];mem.patterns=data.patterns||[]
    addMsg('sys',`restored. ${kg.size} concepts. ${kg.edgeCount} edges. ${webLearnedCount} web-learned.`)
@@ -883,15 +1721,26 @@ async function load(){
 // ════════ BOOT ════════
 async function boot(){
  let loaded=await load()
+ let cleaned=pruneQuestionArtifacts()
+ if(cleaned.nodes||cleaned.edges){
+  addMsg('sys',`cleanup: removed ${cleaned.nodes} question artifacts and ${cleaned.edges} linked edges.`)
+ }
  if(!loaded){
   seed()
   addMsg('sys',`omniscience x initialized. ${kg.size} seed concepts.`)
-  addMsg('ai',`i am omniscience x.<br><br>everything from omniscience — knowledge graphs, multi-hop reasoning, contradiction detection, confidence propagation, counterfactual analysis, analogies, deduction — <b>plus live web learning</b>.<br><br>ask me about <i>anything</i>. if i don't know it, i search <b>ConceptNet</b> (34 million common-sense facts) and <b>Wikipedia</b> in real time. i add what i find to my graph, reason over it, and show you every step.<br><br>🌐 = learned from web &nbsp; ⚡ = inferred by logic &nbsp; ⚠ = contested<br><br>try: "what is photosynthesis" or "compare dogs and cats" or "why do humans dream"<br><br>no api key. no cost. no rules. no ceiling. and now — no limits on knowledge.`,`boot → cognitive architecture + web learning online`)
+ addMsg('ai',`i am omniscience x.<br><br>knowledge graphs, multi-hop reasoning, contradiction detection, confidence propagation, counterfactual analysis, analogies, and deduction — now with deeper live web learning.<br><br>ask me about <i>anything</i>. if i don't know it, i query <b>ConceptNet</b>, <b>Wikipedia</b>, and <b>Wikidata</b>, add the evidence to the graph, and show the full reasoning trace.<br><br>🌐 = learned from web &nbsp; ⚡ = inferred by logic &nbsp; ⚠ = contested<br><br>try: "how do solar panels convert sunlight into electricity?" or "what's the connection between sleep and mental health?"<br><br>no api key. no cost. one file. transparent reasoning.`,`boot → cognitive architecture + web learning online`)
  }
  updateUI(null)
- setInterval(()=>{stepLayout();if(document.getElementById('v-graph').classList.contains('active'))renderGraph()},50)
+ let tick=0
+ setInterval(()=>{
+  let active=document.getElementById('v-graph').classList.contains('active')
+  if(active||tick%3===0)stepLayout()
+  if(active)renderGraph()
+  tick++
+ },40)
 }
 boot()
 </script>
 </body>
 </html>
+
